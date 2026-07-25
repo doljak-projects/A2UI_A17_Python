@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Iterator
 from typing import Any, Protocol
 
 import httpx
@@ -12,6 +13,7 @@ from app.llm.providers import (
     build_tools_payload,
     parse_response,
 )
+from app.llm.sse import iter_sse_json
 from app.llm.types import LLMResponse, Message
 
 ANTHROPIC_VERSION = "2023-06-01"
@@ -30,6 +32,16 @@ class LLMClient(Protocol):
     def send(
         self, messages: list[Message], tools: list[dict[str, Any]] | None = None
     ) -> LLMResponse: ...
+
+
+class StreamingLLMClient(Protocol):
+    """Transporte do LLM em modo stream: devolve os chunks brutos do provedor."""
+
+    provider: str
+
+    def stream(
+        self, messages: list[Message], tools: list[dict[str, Any]] | None = None
+    ) -> Iterator[dict[str, Any]]: ...
 
 
 class HttpLLMClient:
@@ -55,6 +67,25 @@ class HttpLLMClient:
         response.raise_for_status()
         return parse_response(self.provider, response.json())
 
+    def stream(
+        self, messages: list[Message], tools: list[dict[str, Any]] | None = None
+    ) -> Iterator[dict[str, Any]]:
+        """Abre a resposta em streaming e devolve os chunks já desserializados."""
+        body = {**self._body(messages, tools), "stream": True}
+
+        with self._http.stream(
+            "POST",
+            PROVIDER_ENDPOINTS[self.provider],
+            headers=self._headers(),
+            json=body,
+        ) as response:
+            if response.is_error:
+                # O corpo de erro só fica acessível depois de lido explicitamente.
+                response.read()
+                response.raise_for_status()
+
+            yield from iter_sse_json(response.iter_lines())
+
     def _headers(self) -> dict[str, str]:
         api_key = self._settings.llm_api_key.get_secret_value()
         if self.provider == ANTHROPIC:
@@ -68,9 +99,7 @@ class HttpLLMClient:
             "content-type": "application/json",
         }
 
-    def _body(
-        self, messages: list[Message], tools: list[dict[str, Any]] | None
-    ) -> dict[str, Any]:
+    def _body(self, messages: list[Message], tools: list[dict[str, Any]] | None) -> dict[str, Any]:
         body: dict[str, Any] = {
             "model": self._settings.llm_model,
             "temperature": self._settings.llm_temperature,
