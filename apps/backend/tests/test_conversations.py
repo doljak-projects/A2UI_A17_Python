@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session, sessionmaker
 import app.models  # noqa: F401  (registra os models em Base.metadata)
 from app.db.base import Base
 from app.db.session import get_db
-from app.main import app
+from app.main import create_app
 
 
 @pytest.fixture
@@ -36,6 +36,7 @@ def client(tmp_path: Path) -> Iterator[TestClient]:
         finally:
             db.close()
 
+    app = create_app()
     app.dependency_overrides[get_db] = override_get_db
     with TestClient(app) as test_client:
         yield test_client
