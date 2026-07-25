@@ -3,8 +3,16 @@
   top: 0;
   z-index: 10;
 
+  .app-title {
+    font-weight: 500;
+  }
+
   .spacer {
     flex: 1 1 auto;
+  }
+
+  .nav-link-active {
+    background: rgba(255, 255, 255, 0.12);
   }
 }
 
