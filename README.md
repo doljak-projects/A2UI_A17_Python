@@ -59,6 +59,24 @@ npm run be:start
 npm run be:test
 ```
 
+### MCP Server
+
+A mesma app FastAPI expõe as tools do backend via **MCP** (Streamable HTTP) em
+`http://127.0.0.1:8000/mcp`. Para apontar o Cursor para ele, em `.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "a2ui-backend": {
+      "url": "http://127.0.0.1:8000/mcp"
+    }
+  }
+}
+```
+
+Configuração do Claude Desktop, teste rápido com um cliente Python e detalhes de
+implementação estão em [`docs/mcp.md`](docs/mcp.md).
+
 ---
 
 ## Workflow de Desenvolvimento

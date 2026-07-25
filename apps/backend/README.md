@@ -25,6 +25,8 @@ uvicorn app.main:app --reload --port 8000
 
 - API: http://localhost:8000/api/health
 - Docs (Swagger): http://localhost:8000/docs
+- MCP Server: http://localhost:8000/mcp — expõe as tools do `ToolRegistry` a clientes MCP
+  (configuração de cliente em [`docs/mcp.md`](../../docs/mcp.md))
 
 ## Testes
 
