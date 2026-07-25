@@ -32,6 +32,21 @@ a2ui/
 - Node.js 18+ e npm
 - Python 3.11+
 
+## Rodar localmente (frontend + backend)
+
+```bash
+./dev.sh
+```
+
+Sobe os dois serviços em paralelo e encerra ambos com `Ctrl+C`.
+Pré-requisitos: venv criado em `apps/backend/.venv` e `.env` preenchido (veja abaixo).
+
+| Serviço | URL |
+|---|---|
+| Frontend | http://localhost:4200 |
+| Backend (Swagger) | http://localhost:8000/docs |
+| MCP Server | http://localhost:8000/mcp |
+
 ## Frontend (Angular 17 + Material)
 
 ```bash
@@ -76,6 +91,8 @@ A mesma app FastAPI expõe as tools do backend via **MCP** (Streamable HTTP) em
 
 Configuração do Claude Desktop, teste rápido com um cliente Python e detalhes de
 implementação estão em [`docs/mcp.md`](docs/mcp.md).
+
+> Documentação completa do backend (endpoints, variáveis de ambiente, banco de dados, estrutura): [`apps/backend/README.md`](apps/backend/README.md)
 
 ---
 
