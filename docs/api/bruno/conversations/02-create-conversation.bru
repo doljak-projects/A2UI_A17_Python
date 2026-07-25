@@ -1,0 +1,17 @@
+meta {
+  name: CREATE Conversation
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/conversations
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "Minha primeira conversa"
+  }
+}

@@ -1,0 +1,11 @@
+meta {
+  name: LIST Conversations
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/conversations?skip=0&limit=20
+  body: none
+  auth: none
+}

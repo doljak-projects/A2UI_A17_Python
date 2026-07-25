@@ -92,7 +92,7 @@ A mesma app FastAPI expõe as tools do backend via **MCP** (Streamable HTTP) em
 Configuração do Claude Desktop, teste rápido com um cliente Python e detalhes de
 implementação estão em [`docs/mcp.md`](docs/mcp.md).
 
-> Documentação completa do backend (endpoints, variáveis de ambiente, banco de dados, estrutura): [`apps/backend/README.md`](apps/backend/README.md)
+> Documentação completa do backend (endpoints, variáveis de ambiente, banco de dados, estrutura): [`apps/backend/README.md`](./apps/backend/README.md)
 
 ---
 

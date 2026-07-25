@@ -1,0 +1,29 @@
+meta {
+  name: MCP — tools/call get_weather
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/mcp
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "jsonrpc": "2.0",
+    "method": "tools/call",
+    "params": {
+      "name": "get_weather",
+      "arguments": {
+        "city": "São Paulo"
+      }
+    },
+    "id": 2
+  }
+}

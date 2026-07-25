@@ -1,0 +1,34 @@
+meta {
+  name: POST Chat — com histórico
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/chat
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: text/event-stream
+}
+
+body:json {
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "Qual o clima em Lisboa?"
+      },
+      {
+        "role": "assistant",
+        "content": "Em Lisboa está 24°C, ensolarado, umidade de 55%."
+      },
+      {
+        "role": "user",
+        "content": "E no Porto?"
+      }
+    ]
+  }
+}

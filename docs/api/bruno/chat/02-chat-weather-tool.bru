@@ -1,0 +1,26 @@
+meta {
+  name: POST Chat — weather tool (get_weather)
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/chat
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: text/event-stream
+}
+
+body:json {
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "Qual o clima em São Paulo agora?"
+      }
+    ]
+  }
+}
