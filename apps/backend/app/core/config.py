@@ -23,6 +23,21 @@ class Settings(BaseSettings):
     llm_temperature: float = Field(0.7, ge=0.0, le=2.0)
     llm_max_tokens: int = Field(1024, gt=0)
 
+    # --- OpenWeatherMap ---
+    # Integração opcional: sem a chave, o WeatherClient falha com erro explícito
+    # em vez de impedir a inicialização da aplicação.
+    openweather_api_key: SecretStr | None = Field(
+        None, description="API key da OpenWeatherMap"
+    )
+    openweather_base_url: str = "https://api.openweathermap.org/data/2.5"
+
+    @property
+    def openweather_configured(self) -> bool:
+        return bool(
+            self.openweather_api_key
+            and self.openweather_api_key.get_secret_value().strip()
+        )
+
     @field_validator("llm_api_key")
     @classmethod
     def _validate_api_key(cls, value: SecretStr) -> SecretStr:
