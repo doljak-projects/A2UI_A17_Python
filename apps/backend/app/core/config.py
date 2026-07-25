@@ -16,6 +16,11 @@ class Settings(BaseSettings):
     debug: bool = False
     cors_origins: list[str] = ["http://localhost:4200"]
 
+    # --- Banco de dados ---
+    # SQLite em arquivo para manter o setup local em zero; o caminho é relativo
+    # ao diretório de execução (apps/backend).
+    database_url: str = "sqlite:///./a2ui.db"
+
     # --- LLM provider ---
     llm_provider: Literal["openai", "anthropic"] = "openai"
     llm_api_key: SecretStr = Field(..., description="API key do provedor LLM")
