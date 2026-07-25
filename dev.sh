@@ -5,17 +5,23 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 BE="$ROOT/apps/backend"
 FE="$ROOT/apps/frontend"
 
-# --- validações rápidas ---
+# --- dependências do backend ---
 if [ ! -f "$BE/.venv/bin/activate" ]; then
-  echo "[ERROR] venv não encontrado. Rode primeiro:"
-  echo "  cd apps/backend && python -m venv .venv && pip install -r requirements-dev.txt"
-  exit 1
+  echo "[BE] venv não encontrado — criando e instalando dependências..."
+  python3 -m venv "$BE/.venv"
+  "$BE/.venv/bin/pip" install --quiet -r "$BE/requirements-dev.txt"
+  echo "[BE] Dependências instaladas."
 fi
 
 if [ ! -f "$BE/.env" ]; then
-  echo "[ERROR] apps/backend/.env não encontrado. Rode:"
-  echo "  cp apps/backend/.env.example apps/backend/.env  # e preencha as chaves"
-  exit 1
+  if [ -f "$BE/.env.example" ]; then
+    cp "$BE/.env.example" "$BE/.env"
+    echo "[WARN] apps/backend/.env criado a partir do .env.example."
+    echo "[WARN] Preencha as chaves (LLM_API_KEY, WEATHER_API_KEY, etc.) antes de usar o chat."
+  else
+    echo "[ERROR] apps/backend/.env não encontrado e .env.example também ausente."
+    exit 1
+  fi
 fi
 
 if [ ! -d "$FE/node_modules" ]; then
