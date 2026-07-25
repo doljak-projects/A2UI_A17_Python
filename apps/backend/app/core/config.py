@@ -23,6 +23,20 @@ class Settings(BaseSettings):
     llm_temperature: float = Field(0.7, ge=0.0, le=2.0)
     llm_max_tokens: int = Field(1024, gt=0)
 
+    # --- WeatherAPI.com ---
+    # Integração opcional: sem a chave, o WeatherClient falha com erro explícito
+    # em vez de impedir a inicialização da aplicação.
+    weather_api_key: SecretStr | None = Field(
+        None, description="API key do WeatherAPI.com"
+    )
+    weather_base_url: str = "https://api.weatherapi.com/v1"
+
+    @property
+    def weather_configured(self) -> bool:
+        return bool(
+            self.weather_api_key and self.weather_api_key.get_secret_value().strip()
+        )
+
     @field_validator("llm_api_key")
     @classmethod
     def _validate_api_key(cls, value: SecretStr) -> SecretStr:
