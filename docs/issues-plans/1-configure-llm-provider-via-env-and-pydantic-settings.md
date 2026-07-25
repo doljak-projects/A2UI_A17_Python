@@ -2,7 +2,7 @@
 issue: 1
 title: "BE: Configurar provedor LLM via .env e pydantic-settings"
 branch: chore/1-llm-config-via-env-and-pydantic-settings
-status: done
+status: closed
 last_updated: 07-25-2026
 ---
 
