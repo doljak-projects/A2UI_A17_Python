@@ -145,6 +145,12 @@ Cada item será rastreado como uma issue no repositório. O objetivo é cobrir t
 - [x] Expor tools via **MCP Server** (Model Context Protocol) no FastAPI (#7)
 - [x] Implementar **BE CRUD** (entidade de exemplo end-to-end: model → schema → service → route) (#8)
 
+### Frontend — Chat base (sem AG-UI / A2UI)
+
+- [ ] `ChatService` — consumir `POST /api/chat` via SSE com Fetch streaming (#24)
+- [ ] `ChatComponent` — layout, estado com Signals e renderização de tokens em tempo real (#25)
+- [ ] Rota `/chat` e link de navegação na toolbar (#26)
+
 ### AG-UI — Protocolo agêntico
 
 - [ ] Configurar **AG-UI Server** no backend (emissão de eventos de UI via streaming)
@@ -154,7 +160,6 @@ Cada item será rastreado como uma issue no repositório. O objetivo é cobrir t
 
 - [ ] Definir o **contrato do catálogo JSON** (schema que mapeia nomes de componentes para props A2UI)
 - [ ] Implementar o **catálogo de componentes A2UI** (registro de componentes renderizáveis por nome)
-- [ ] Construir o **componente de chat** (input do usuário + histórico de mensagens)
 - [ ] Construir o **renderer A2UI** (lê eventos AG-UI via Signal e renderiza componentes do catálogo dinamicamente)
 
 ---
