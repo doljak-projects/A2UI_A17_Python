@@ -11,6 +11,8 @@
     "fe:build": "npm --workspace apps/frontend run build",
     "fe:test": "npm --workspace apps/frontend run test",
     "be:start": "cd apps/backend && uvicorn app.main:app --reload --port 8000",
-    "be:test": "cd apps/backend && pytest"
+    "be:test": "cd apps/backend && pytest",
+    "be:migrate": "cd apps/backend && alembic upgrade head",
+    "be:migration": "cd apps/backend && alembic revision --autogenerate -m"
   }
 }
