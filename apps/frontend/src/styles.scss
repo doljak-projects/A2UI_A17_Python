@@ -1,0 +1,31 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$a2ui-primary: mat.define-palette(mat.$indigo-palette);
+$a2ui-accent: mat.define-palette(mat.$blue-palette, A200, A100, A400);
+$a2ui-warn: mat.define-palette(mat.$red-palette);
+
+$a2ui-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $a2ui-primary,
+      accent: $a2ui-accent,
+      warn: $a2ui-warn,
+    ),
+    typography: mat.define-typography-config(),
+    density: 0,
+  )
+);
+
+@include mat.all-component-themes($a2ui-theme);
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}

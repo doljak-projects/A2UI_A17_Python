@@ -1,0 +1,10 @@
+.welcome-card {
+  max-width: 640px;
+  margin: 0 auto;
+
+  mat-card-actions {
+    display: flex;
+    gap: 8px;
+    padding: 8px 16px 16px;
+  }
+}

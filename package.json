@@ -1,0 +1,16 @@
+{
+  "name": "a2ui",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A2UI monorepo - frontend Angular 17 + Material, backend Python (FastAPI)",
+  "workspaces": [
+    "apps/frontend"
+  ],
+  "scripts": {
+    "fe:start": "npm --workspace apps/frontend run start",
+    "fe:build": "npm --workspace apps/frontend run build",
+    "fe:test": "npm --workspace apps/frontend run test",
+    "be:start": "cd apps/backend && uvicorn app.main:app --reload --port 8000",
+    "be:test": "cd apps/backend && pytest"
+  }
+}

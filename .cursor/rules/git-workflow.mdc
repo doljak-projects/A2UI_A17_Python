@@ -1,0 +1,15 @@
+---
+description: Git workflow ownership - user handles branches, commits and PRs manually
+alwaysApply: true
+---
+
+# Git Workflow
+
+O usuário faz **branches, commits e pull requests manualmente**.
+
+- NÃO criar branches.
+- NÃO fazer `git commit` (nem `git add` com intenção de commitar).
+- NÃO abrir/gerenciar pull requests.
+- Pode rodar comandos de leitura (`git status`, `git diff`, `git log`) quando útil.
+- Apenas deixe as alterações no working tree; o usuário revisa e commita.
+- Só execute qualquer uma dessas ações git de escrita se o usuário pedir explicitamente naquele momento.

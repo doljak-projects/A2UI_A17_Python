@@ -1,0 +1,15 @@
+<mat-toolbar color="primary" class="app-toolbar">
+  <button mat-icon-button aria-label="Menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>{{ title }}</span>
+  <span class="spacer"></span>
+  <a mat-button href="https://material.angular.io" target="_blank" rel="noopener">
+    <mat-icon>open_in_new</mat-icon>
+    Material
+  </a>
+</mat-toolbar>
+
+<main class="app-content">
+  <router-outlet></router-outlet>
+</main>
