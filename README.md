@@ -113,20 +113,20 @@ Cada item será rastreado como uma issue no repositório. O objetivo é cobrir t
 
 ### LLM — Configuração central
 
-- [ ] Configurar provedor LLM (modelo, API key, parâmetros de tool use e streaming) via `.env` e `pydantic-settings` (#1)
-- [ ] Implementar invocação de tools pelo LLM (tool calling / function calling) (#2)
-- [ ] Tratar streaming de eventos LLM no backend (#3)
+- [x] Configurar provedor LLM (modelo, API key, parâmetros de tool use e streaming) via `.env` e `pydantic-settings` (#1)
+- [x] Implementar invocação de tools pelo LLM (tool calling / function calling) (#2)
+- [x] Tratar streaming de eventos LLM no backend (#3)
 
 ### Weather API
 
-- [ ] Registrar e configurar chave da OpenWeatherMap (#4)
-- [ ] Criar tool `get_weather(city)` no backend consumindo a API (#5)
+- [x] Registrar e configurar chave da WeatherAPI.com (#4, #14)
+- [x] Criar tool `get_weather(city)` no backend consumindo a API (#5)
 
 ### Backend — Tools & MCP
 
-- [ ] Estruturar camada de tools chamáveis pelo LLM (roteamento, schemas, execução) (#6)
-- [ ] Expor tools via **MCP Server** (Model Context Protocol) no FastAPI (#7)
-- [ ] Implementar **BE CRUD** (entidade de exemplo end-to-end: model → schema → service → route) (#8)
+- [x] Estruturar camada de tools chamáveis pelo LLM (roteamento, schemas, execução) (#6)
+- [x] Expor tools via **MCP Server** (Model Context Protocol) no FastAPI (#7)
+- [x] Implementar **BE CRUD** (entidade de exemplo end-to-end: model → schema → service → route) (#8)
 
 ### AG-UI — Protocolo agêntico
 
@@ -144,12 +144,13 @@ Cada item será rastreado como uma issue no repositório. O objetivo é cobrir t
 
 ## Estado atual
 
-- Frontend: app shell com toolbar Material, tema `azure-blue`, tipografia e animações habilitadas, página inicial de exemplo.
-- Backend: estrutura base do FastAPI com endpoint `GET /api/health`, configuração via `pydantic-settings` e teste inicial.
+- **Backend:** camada de tools (ToolRegistry), tool calling + streaming com LLM, tool `get_weather` (WeatherAPI.com), MCP Server em `/mcp`, CRUD de `Conversation` com SQLAlchemy + Alembic. ✅
+- **Frontend:** app shell com toolbar Material, tema `azure-blue`, tipografia e animações habilitadas — aguardando integração AG-UI/A2UI.
 
-**Branches ativas:**
+**Próximos passos:** AG-UI Server (backend) → AG-UI Client (frontend) → catálogo A2UI + renderer.
 
-| Branch | Issue | Status |
+**Branch ativa:**
+
+| Branch | Descrição | Status |
 |---|---|---|
-| `chore/1-llm-config-via-env-and-pydantic-settings` | #1 | Em desenvolvimento |
-| `chore/worktree-structure-9-organize-and-update-readme` | #9 | Em desenvolvimento |
+| `docs/dev-script-and-readme-update` | dev.sh + READMEs atualizados | PR #21 aberta |
