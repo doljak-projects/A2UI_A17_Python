@@ -61,26 +61,54 @@ npm run be:test
 
 ---
 
+## Workflow de Desenvolvimento
+
+Cada issue tem uma branch e uma worktree dedicada, criadas via `/doljak-create-issue`.
+
+**Convenções:**
+
+| Item | Formato | Exemplo |
+|---|---|---|
+| Branch | `<prefixo>/<tema>-<numero>-<titulo>` | `chore/llm-config-1-setup-provider` |
+| Worktree | `wts/<numero>-worktree-<tema>` | `wts/1-worktree-llm-config` |
+| Doc de spec | `docs/issues-plans/issue-<numero>-<tema>.md` | `docs/issues-plans/issue-1-llm-config.md` |
+
+Prefixos: `feat/` · `chore/` · `fix/` · `refactor/` · `docs/`
+
+As worktrees ficam em `wts/` dentro do repo (ignorado pelo `.gitignore`). Para acessar uma worktree ativa:
+
+```bash
+# listar worktrees ativas
+git worktree list
+
+# entrar em uma worktree
+cd wts/1-worktree-llm-config
+```
+
+Todo merge em `main` passa por PR com ao menos 1 aprovação — push direto está bloqueado.
+
+---
+
 ## Checklist de Aprendizado
 
 Cada item será rastreado como uma issue no repositório. O objetivo é cobrir todas as camadas da stack de ponta a ponta.
 
 ### LLM — Configuração central
 
-- [ ] Configurar provedor LLM (modelo, API key, parâmetros de tool use e streaming) via `.env` e `pydantic-settings`
-- [ ] Implementar invocação de tools pelo LLM (tool calling / function calling)
-- [ ] Tratar streaming de eventos LLM no backend
+- [ ] Configurar provedor LLM (modelo, API key, parâmetros de tool use e streaming) via `.env` e `pydantic-settings` (#1)
+- [ ] Implementar invocação de tools pelo LLM (tool calling / function calling) (#2)
+- [ ] Tratar streaming de eventos LLM no backend (#3)
 
 ### Weather API
 
-- [ ] Registrar e configurar chave da OpenWeatherMap
-- [ ] Criar tool `get_weather(city)` no backend consumindo a API
+- [ ] Registrar e configurar chave da OpenWeatherMap (#4)
+- [ ] Criar tool `get_weather(city)` no backend consumindo a API (#5)
 
 ### Backend — Tools & MCP
 
-- [ ] Estruturar camada de tools chamáveis pelo LLM (roteamento, schemas, execução)
-- [ ] Expor tools via **MCP Server** (Model Context Protocol) no FastAPI
-- [ ] Implementar **BE CRUD** (entidade de exemplo end-to-end: model → schema → service → route)
+- [ ] Estruturar camada de tools chamáveis pelo LLM (roteamento, schemas, execução) (#6)
+- [ ] Expor tools via **MCP Server** (Model Context Protocol) no FastAPI (#7)
+- [ ] Implementar **BE CRUD** (entidade de exemplo end-to-end: model → schema → service → route) (#8)
 
 ### AG-UI — Protocolo agêntico
 
@@ -100,3 +128,10 @@ Cada item será rastreado como uma issue no repositório. O objetivo é cobrir t
 
 - Frontend: app shell com toolbar Material, tema `azure-blue`, tipografia e animações habilitadas, página inicial de exemplo.
 - Backend: estrutura base do FastAPI com endpoint `GET /api/health`, configuração via `pydantic-settings` e teste inicial.
+
+**Branches ativas:**
+
+| Branch | Issue | Status |
+|---|---|---|
+| `chore/1-llm-config-via-env-and-pydantic-settings` | #1 | Em desenvolvimento |
+| `chore/worktree-structure-9-organize-and-update-readme` | #9 | Em desenvolvimento |
