@@ -1,0 +1,183 @@
+{
+  "info": {
+    "name": "A2UI Backend",
+    "description": "Coleção de requests para a API do A2UI Backend (FastAPI).\n\nBase URL: http://localhost:8000\n\nInicie o servidor com `./dev.sh` ou `uvicorn app.main:app --reload --port 8000`.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8000", "type": "string" },
+    { "key": "conversationId", "value": "1", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET Health",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/health", "host": ["{{baseUrl}}"], "path": ["api", "health"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Conversations",
+      "item": [
+        {
+          "name": "LIST Conversations",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/conversations?skip=0&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "conversations"],
+              "query": [
+                { "key": "skip", "value": "0" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "CREATE Conversation",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/conversations", "host": ["{{baseUrl}}"], "path": ["api", "conversations"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Minha primeira conversa\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "GET Conversation by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/conversations/{{conversationId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "conversations", "{{conversationId}}"]
+            }
+          }
+        },
+        {
+          "name": "UPDATE Conversation",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/conversations/{{conversationId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "conversations", "{{conversationId}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Título atualizado\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "DELETE Conversation",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/conversations/{{conversationId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "conversations", "{{conversationId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Chat (SSE)",
+      "description": "Respostas em Server-Sent Events (text/event-stream). No Postman, use Send e observe os chunks no painel de resposta.",
+      "item": [
+        {
+          "name": "POST Chat — mensagem simples",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "text/event-stream" }
+            ],
+            "url": { "raw": "{{baseUrl}}/api/chat", "host": ["{{baseUrl}}"], "path": ["api", "chat"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Olá! Como você pode me ajudar?\"\n    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "POST Chat — weather tool (get_weather)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "text/event-stream" }
+            ],
+            "url": { "raw": "{{baseUrl}}/api/chat", "host": ["{{baseUrl}}"], "path": ["api", "chat"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Qual o clima em São Paulo agora?\"\n    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "POST Chat — com histórico",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "text/event-stream" }
+            ],
+            "url": { "raw": "{{baseUrl}}/api/chat", "host": ["{{baseUrl}}"], "path": ["api", "chat"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Qual o clima em Lisboa?\"\n    },\n    {\n      \"role\": \"assistant\",\n      \"content\": \"Em Lisboa está 24°C, ensolarado, umidade de 55%.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"E no Porto?\"\n    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "MCP Server",
+      "description": "MCP Streamable HTTP em /mcp. Protocolo JSON-RPC 2.0.",
+      "item": [
+        {
+          "name": "MCP — tools/list",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/mcp", "host": ["{{baseUrl}}"], "path": ["mcp"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"tools/list\",\n  \"id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "MCP — tools/call get_weather",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/mcp", "host": ["{{baseUrl}}"], "path": ["mcp"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"tools/call\",\n  \"params\": {\n    \"name\": \"get_weather\",\n    \"arguments\": {\n      \"city\": \"São Paulo\"\n    }\n  },\n  \"id\": 2\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

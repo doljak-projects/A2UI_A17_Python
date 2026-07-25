@@ -77,6 +77,57 @@ uvicorn app.main:app --reload --port 8000
 - **ReDoc:** http://localhost:8000/redoc
 - **MCP:** http://localhost:8000/mcp — configuração de cliente em [`docs/mcp.md`](../../docs/mcp.md)
 
+## Exemplo: tool get_weather
+
+A tool `get_weather` é chamada automaticamente pelo LLM quando o usuário pergunta sobre o clima. Ela consulta a [WeatherAPI.com](https://www.weatherapi.com/) e retorna temperatura, descrição e umidade.
+
+**Via chat (SSE)** — o LLM decide invocar a tool e devolve a resposta em streaming:
+
+```bash
+curl -N -X POST http://localhost:8000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [
+      {"role": "user", "content": "Qual o clima em São Paulo agora?"}
+    ]
+  }'
+```
+
+Resposta esperada (eventos SSE):
+```
+data: {"type": "text_delta", "data": {"delta": "O clima em São Paulo agora é "}}
+data: {"type": "text_delta", "data": {"delta": "de 22°C, parcialmente nublado, umidade de 68%."}}
+data: {"type": "message_stop", "data": {}}
+```
+
+**Via MCP** — invoca a tool diretamente sem passar pelo LLM:
+
+```bash
+curl -X POST http://localhost:8000/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "tools/call",
+    "params": {
+      "name": "get_weather",
+      "arguments": {"city": "Lisboa"}
+    },
+    "id": 1
+  }'
+```
+
+Resposta:
+```json
+{
+  "city": "Lisboa",
+  "temperature_c": 24.1,
+  "description": "Sunny",
+  "humidity": 55
+}
+```
+
+> Requer `WEATHER_API_KEY` preenchida no `.env`. Sem a chave, ambas as chamadas retornam erro 500.
+
 ## Testes
 
 ```bash

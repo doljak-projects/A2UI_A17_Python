@@ -1,0 +1,23 @@
+meta {
+  name: MCP — tools/list
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/mcp
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "jsonrpc": "2.0",
+    "method": "tools/list",
+    "id": 1
+  }
+}
