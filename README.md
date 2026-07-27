@@ -130,31 +130,36 @@ Cada item será rastreado como uma issue no repositório. O objetivo é cobrir t
 
 ### LLM — Configuração central
 
-- [x] Configurar provedor LLM (modelo, API key, parâmetros de tool use e streaming) via `.env` e `pydantic-settings` (#1)
-- [x] Implementar invocação de tools pelo LLM (tool calling / function calling) (#2)
-- [x] Tratar streaming de eventos LLM no backend (#3)
+- [x] Configurar provedor LLM (modelo, API key, parâmetros de tool use e streaming) via `.env` e `pydantic-settings` ([#1](https://github.com/doljak-projects/A2UI_A17_Python/issues/1))
+- [x] Implementar invocação de tools pelo LLM (tool calling / function calling) ([#2](https://github.com/doljak-projects/A2UI_A17_Python/issues/2))
+- [x] Tratar streaming de eventos LLM no backend ([#3](https://github.com/doljak-projects/A2UI_A17_Python/issues/3))
 
 ### Weather API
 
-- [x] Registrar e configurar chave da WeatherAPI.com (#4, #14)
-- [x] Criar tool `get_weather(city)` no backend consumindo a API (#5)
+- [x] Registrar e configurar chave da WeatherAPI.com ([#4](https://github.com/doljak-projects/A2UI_A17_Python/issues/4), [#14](https://github.com/doljak-projects/A2UI_A17_Python/issues/14))
+- [x] Criar tool `get_weather(city)` no backend consumindo a API ([#5](https://github.com/doljak-projects/A2UI_A17_Python/issues/5))
 
 ### Backend — Tools & MCP
 
-- [x] Estruturar camada de tools chamáveis pelo LLM (roteamento, schemas, execução) (#6)
-- [x] Expor tools via **MCP Server** (Model Context Protocol) no FastAPI (#7)
-- [x] Implementar **BE CRUD** (entidade de exemplo end-to-end: model → schema → service → route) (#8)
+- [x] Estruturar camada de tools chamáveis pelo LLM (roteamento, schemas, execução) ([#6](https://github.com/doljak-projects/A2UI_A17_Python/issues/6))
+- [x] Expor tools via **MCP Server** (Model Context Protocol) no FastAPI ([#7](https://github.com/doljak-projects/A2UI_A17_Python/issues/7))
+- [x] Implementar **BE CRUD** (entidade de exemplo end-to-end: model → schema → service → route) ([#8](https://github.com/doljak-projects/A2UI_A17_Python/issues/8))
 
 ### Frontend — Chat base (sem AG-UI / A2UI)
 
-- [ ] `ChatService` — consumir `POST /api/chat` via SSE com Fetch streaming (#24)
-- [ ] `ChatComponent` — layout, estado com Signals e renderização de tokens em tempo real (#25)
-- [ ] Rota `/chat` e link de navegação na toolbar (#26)
+- [x] `ChatService` — consumir `POST /api/chat` via SSE com Fetch streaming ([#24](https://github.com/doljak-projects/A2UI_A17_Python/issues/24))
+- [x] `ChatComponent` — layout, estado com Signals e renderização de tokens em tempo real ([#25](https://github.com/doljak-projects/A2UI_A17_Python/issues/25))
+- [x] Rota `/chat` e link de navegação na toolbar ([#26](https://github.com/doljak-projects/A2UI_A17_Python/issues/26))
 
 ### AG-UI — Protocolo agêntico
 
 - [ ] Configurar **AG-UI Server** no backend (emissão de eventos de UI via streaming)
 - [ ] Configurar **AG-UI Client** no frontend (consumo do stream e despacho de eventos para Signals)
+
+**A estudar — Tutorial A2UI Parte 1** ([`docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md`](docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md), baseado em [AG-UI in Practice: The SDK for TypeScript](https://www.angulararchitects.io/en/blog/ag-ui-in-practice-the-sdk-for-typescript/)):
+
+- [ ] `[Back]` Esqueleto de agente (`AbstractAgent`) emitindo `RUN_STARTED`/`TEXT_MESSAGE_*`/`RUN_FINISHED` ([#32](https://github.com/doljak-projects/A2UI_A17_Python/issues/32))
+- [ ] `[Front]` Consumir eventos do agente via `HttpAgent` + `AgentSubscriber` ([#34](https://github.com/doljak-projects/A2UI_A17_Python/issues/34))
 
 ### A2UI — Frontend agêntico
 
@@ -162,17 +167,15 @@ Cada item será rastreado como uma issue no repositório. O objetivo é cobrir t
 - [ ] Implementar o **catálogo de componentes A2UI** (registro de componentes renderizáveis por nome)
 - [ ] Construir o **renderer A2UI** (lê eventos AG-UI via Signal e renderiza componentes do catálogo dinamicamente)
 
+**A estudar — Tutorial A2UI Parte 1** ([`docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md`](docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md)):
+
+- [ ] `[Back]` Ligar a tool `get_weather` existente como server-side tool call do AG-UI ([#33](https://github.com/doljak-projects/A2UI_A17_Python/issues/33))
+- [ ] `[Front]` Definir schema client-side (`Tool` + zod) de clima para renderização no chat ([#35](https://github.com/doljak-projects/A2UI_A17_Python/issues/35))
+- [ ] `[Front]` Ciclo de duas runs para resultado de tool call client-side ([#36](https://github.com/doljak-projects/A2UI_A17_Python/issues/36))
+
 ---
 
 ## Estado atual
 
 - **Backend:** camada de tools (ToolRegistry), tool calling + streaming com LLM, tool `get_weather` (WeatherAPI.com), MCP Server em `/mcp`, CRUD de `Conversation` com SQLAlchemy + Alembic. ✅
 - **Frontend:** app shell com toolbar Material, tema `azure-blue`, tipografia e animações habilitadas — aguardando integração AG-UI/A2UI.
-
-**Próximos passos:** AG-UI Server (backend) → AG-UI Client (frontend) → catálogo A2UI + renderer.
-
-**Branch ativa:**
-
-| Branch | Descrição | Status |
-|---|---|---|
-| `docs/dev-script-and-readme-update` | dev.sh + READMEs atualizados | PR #21 aberta |
