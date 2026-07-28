@@ -9,3 +9,4 @@ mcp>=1.28,<1.29
 # fastapi e mcp disputam a faixa do starlette: no Python 3.14 o mcp exige >=0.48,
 # enquanto o fastapi 0.124 aceita <0.51. O pino explícito trava essa interseção.
 starlette>=0.48,<0.51
+ag-ui-protocol>=0.1.19,<0.2
