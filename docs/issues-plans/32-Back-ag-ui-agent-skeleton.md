@@ -2,7 +2,7 @@
 issue: 32
 title: "[Back] -AG-UI- Agent skeleton emitting RUN_STARTED/TEXT_MESSAGE/RUN_FINISHED events"
 branch: feat/agui-agent-32-skeleton-events
-status: in-progress
+status: closed
 last_updated: 07-28-2026
 ---
 
