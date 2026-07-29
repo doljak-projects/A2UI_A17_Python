@@ -158,8 +158,8 @@ Cada item será rastreado como uma issue no repositório. O objetivo é cobrir t
 
 **A estudar — Tutorial A2UI Parte 1** ([`docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md`](docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md), baseado em [AG-UI in Practice: The SDK for TypeScript](https://www.angulararchitects.io/en/blog/ag-ui-in-practice-the-sdk-for-typescript/)):
 
-- [x] `[Back]` Esqueleto de agente (`AbstractAgent`) emitindo `RUN_STARTED`/`TEXT_MESSAGE_*`/`RUN_FINISHED` ([#32](https://github.com/doljak-projects/A2UI_A17_Python/issues/32))
-- [ ] `[Front]` Consumir eventos do agente via `HttpAgent` + `AgentSubscriber` ([#34](https://github.com/doljak-projects/A2UI_A17_Python/issues/34))
+- [x] `[Back]` Esqueleto de agente (`AbstractAgent`) emitindo `RUN_STARTED`/`TEXT_MESSAGE_*`/`RUN_FINISHED` ([#32](https://github.com/doljak-projects/A2UI_A17_Python/issues/32)) — [como funciona (diagrama)](docs/diagrams/backend-agui-agent.md)
+- [ ] `[Front]` Consumir eventos do agente via `HttpAgent` + `AgentSubscriber` ([#34](https://github.com/doljak-projects/A2UI_A17_Python/issues/34)) — [como funciona (diagrama)](docs/diagrams/34-front-agui-http-agent.md)
 
 ### A2UI — Frontend agêntico
 
@@ -169,7 +169,7 @@ Cada item será rastreado como uma issue no repositório. O objetivo é cobrir t
 
 **A estudar — Tutorial A2UI Parte 1** ([`docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md`](docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md)):
 
-- [x] `[Back]` Ligar a tool `get_weather` existente como server-side tool call do AG-UI ([#33](https://github.com/doljak-projects/A2UI_A17_Python/issues/33))
+- [x] `[Back]` Ligar a tool `get_weather` existente como server-side tool call do AG-UI ([#33](https://github.com/doljak-projects/A2UI_A17_Python/issues/33)) — [como funciona (diagrama)](docs/diagrams/backend-agui-agent.md)
 - [ ] `[Front]` Definir schema client-side (`Tool` + zod) de clima para renderização no chat ([#35](https://github.com/doljak-projects/A2UI_A17_Python/issues/35))
 - [ ] `[Front]` Ciclo de duas runs para resultado de tool call client-side ([#36](https://github.com/doljak-projects/A2UI_A17_Python/issues/36))
 
