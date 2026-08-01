@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AguiAgentService } from '../../core/services/agui-agent.service';
+import { showWeatherTool } from '../../core/services/weather-tool-for-a2ui';
 
 type RunStatus = 'idle' | 'running' | 'done' | 'error';
 
@@ -10,6 +11,8 @@ type RunStatus = 'idle' | 'running' | 'done' | 'error';
  * Ponto de entrada isolado da issue #34: dispara `addMessage` + `runAgent`
  * contra `GET /api/agui/weather-tool-demo` só para validar o transporte
  * ponta a ponta (eventos aparecem no console via `aguiLogSubscriber`).
+ * Desde a issue #35, registra `showWeatherTool` na chamada `runAgent`
+ * (o endpoint de demo ainda não inspeciona `tools`, é só preparação).
  * Não integra com `ChatComponent`/`ChatService`.
  */
 @Component({
@@ -35,7 +38,7 @@ export class AguiTestComponent {
     });
 
     try {
-      await agent.runAgent();
+      await agent.runAgent({ tools: [showWeatherTool] });
       this.status.set('done');
     } catch (err) {
       console.error('[AG-UI] runAgent falhou', err);
