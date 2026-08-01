@@ -27,4 +27,3 @@ Feita — infraestrutura de tools (contrato + registry + dispatcher) implementad
 ## Notes
 - Critério de conclusão atendido: registry com a tool `echo` registrada, descoberta (`get_tools_schema`) e executada via `execute_tool()` — 9 testes passando.
 - `execute_tool(name, arguments)` recebe os argumentos já desserializados (dict), pronto para o dispatcher usado pelo tool calling (issue #2).
-- Commit/push/PR permanecem manuais.
