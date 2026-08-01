@@ -57,6 +57,32 @@ class WeatherChatAgent(AGUIAgent):
         yield "Consultando o clima para São Paulo..."
 
 
+class WeatherClientToolCallAgent(AGUIAgent):
+    """Demo da issue #36: pede uma tool call **client-side**, sem resolver.
+
+    Ao contrário do `WeatherToolCallAgent` (#33, server-side), este agente
+    para no `TOOL_CALL_END` — não chama `get_weather` nem emite
+    `TOOL_CALL_RESULT`. A tool call fica pendente para o cliente detectar
+    (via `AgentSubscriber`), executar a ação local e devolver o resultado
+    numa segunda run.
+    """
+
+    TOOL_CALL_ID = "4001"
+    CITY = "São Paulo"
+
+    def run(self, input: RunAgentInput) -> Iterator[BaseEvent]:
+        yield RunStartedEvent(thread_id=input.thread_id, run_id=input.run_id)
+
+        yield ToolCallStartEvent(tool_call_id=self.TOOL_CALL_ID, tool_call_name="show_weather")
+        yield ToolCallArgsEvent(
+            tool_call_id=self.TOOL_CALL_ID,
+            delta=json.dumps({"city": self.CITY}, ensure_ascii=False),
+        )
+        yield ToolCallEndEvent(tool_call_id=self.TOOL_CALL_ID)
+
+        yield RunFinishedEvent(thread_id=input.thread_id, run_id=input.run_id)
+
+
 class WeatherToolCallAgent(AGUIAgent):
     """Estende o esqueleto da issue #32 com uma tool call server-side real.
 

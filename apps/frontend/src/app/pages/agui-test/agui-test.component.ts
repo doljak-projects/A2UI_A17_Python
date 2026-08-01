@@ -3,16 +3,22 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AguiAgentService } from '../../core/services/agui-agent.service';
-import { showWeatherTool } from '../../core/services/weather-tool-for-a2ui';
+import {
+  buildMockWeatherResult,
+  createWeatherToolCallCapture,
+  showWeatherTool,
+} from '../../core/services/weather-tool-for-a2ui';
 
 type RunStatus = 'idle' | 'running' | 'done' | 'error';
 
 /**
- * Ponto de entrada isolado da issue #34: dispara `addMessage` + `runAgent`
- * contra `GET /api/agui/weather-tool-demo` só para validar o transporte
- * ponta a ponta (eventos aparecem no console via `aguiLogSubscriber`).
- * Desde a issue #35, registra `showWeatherTool` na chamada `runAgent`
- * (o endpoint de demo ainda não inspeciona `tools`, é só preparação).
+ * Ponto de entrada isolado da issue #34, estendido na #36 para o ciclo de
+ * duas runs de tool call client-side:
+ * 1) `GET /api/agui/weather-tool-client-demo` — pede a tool call `show_weather`
+ * 2) cliente "executa" localmente (dado mockado) e monta a `ToolMessage`
+ * 3) `GET /api/agui/demo` — 2ª run, texto simples (o backend não vê o
+ *    resultado de fato; ver `## Decisão de arquitetura` no doc da #36)
+ * Eventos aparecem no console via `aguiLogSubscriber`.
  * Não integra com `ChatComponent`/`ChatService`.
  */
 @Component({
@@ -38,7 +44,22 @@ export class AguiTestComponent {
     });
 
     try {
-      await agent.runAgent({ tools: [showWeatherTool] });
+      this.aguiAgentService.pointAt('/agui/weather-tool-client-demo');
+      const { subscriber, pending } = createWeatherToolCallCapture();
+      await agent.runAgent({ tools: [showWeatherTool] }, subscriber);
+
+      const { toolCallId, city } = await pending;
+      const result = buildMockWeatherResult(city);
+      agent.addMessage({
+        id: crypto.randomUUID(),
+        role: 'tool',
+        toolCallId,
+        content: JSON.stringify(result),
+      });
+
+      this.aguiAgentService.pointAt('/agui/demo');
+      await agent.runAgent();
+
       this.status.set('done');
     } catch (err) {
       console.error('[AG-UI] runAgent falhou', err);

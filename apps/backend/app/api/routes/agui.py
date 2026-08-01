@@ -8,7 +8,12 @@ from ag_ui.encoder import EventEncoder
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 
-from app.agui.agent import AGUIAgent, WeatherChatAgent, WeatherToolCallAgent
+from app.agui.agent import (
+    AGUIAgent,
+    WeatherChatAgent,
+    WeatherClientToolCallAgent,
+    WeatherToolCallAgent,
+)
 
 router = APIRouter()
 
@@ -35,6 +40,14 @@ def agui_weather_tool_demo() -> StreamingResponse:
     tool call server-side e a resolve com o `get_weather` real (issue #5).
     """
     return _stream(WeatherToolCallAgent())
+
+
+@router.get("/agui/weather-tool-client-demo")
+def agui_weather_tool_client_demo() -> StreamingResponse:
+    """Demo funcional da issue #36: roda o `WeatherClientToolCallAgent`, que
+    emite uma tool call pendente para o cliente resolver (sem `TOOL_CALL_RESULT`).
+    """
+    return _stream(WeatherClientToolCallAgent())
 
 
 def _stream(agent: AGUIAgent) -> StreamingResponse:

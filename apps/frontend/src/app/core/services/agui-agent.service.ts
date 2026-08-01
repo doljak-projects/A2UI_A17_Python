@@ -23,4 +23,14 @@ export class AguiAgentService {
   getAgent(): AguiGetHttpAgent {
     return this.agent;
   }
+
+  /**
+   * Aponta a instância compartilhada do agente para outro endpoint AG-UI do
+   * backend (ex: alternar entre demos ao longo de um ciclo de duas runs,
+   * issue #36). O `AguiGetHttpAgent` já sobrescreve `requestInit()` para
+   * `GET` sem corpo, então só a URL muda entre chamadas.
+   */
+  pointAt(path: string): void {
+    this.agent.url = `${environment.apiBaseUrl}${path}`;
+  }
 }
