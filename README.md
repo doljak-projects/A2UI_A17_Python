@@ -156,10 +156,16 @@ Cada item será rastreado como uma issue no repositório. O objetivo é cobrir t
 - [ ] Configurar **AG-UI Server** no backend (emissão de eventos de UI via streaming)
 - [ ] Configurar **AG-UI Client** no frontend (consumo do stream e despacho de eventos para Signals)
 
-**A estudar — Tutorial A2UI Parte 1** ([`docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md`](docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md), baseado em [AG-UI in Practice: The SDK for TypeScript](https://www.angulararchitects.io/en/blog/ag-ui-in-practice-the-sdk-for-typescript/)):
+**Tutorial A2UI Parte 1** ([`docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md`](docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md), baseado em [AG-UI in Practice: The SDK for TypeScript](https://www.angulararchitects.io/en/blog/ag-ui-in-practice-the-sdk-for-typescript/)) — **concluída**:
 
 - [x] `[Back]` Esqueleto de agente (`AbstractAgent`) emitindo `RUN_STARTED`/`TEXT_MESSAGE_*`/`RUN_FINISHED` ([#32](https://github.com/doljak-projects/A2UI_A17_Python/issues/32)) — [como funciona (diagrama)](docs/diagrams/backend-agui-agent.md)
-- [ ] `[Front]` Consumir eventos do agente via `HttpAgent` + `AgentSubscriber` ([#34](https://github.com/doljak-projects/A2UI_A17_Python/issues/34)) — [como funciona (diagrama)](docs/diagrams/34-front-agui-http-agent.md)
+- [x] `[Front]` Consumir eventos do agente via `HttpAgent` + `AgentSubscriber` ([#34](https://github.com/doljak-projects/A2UI_A17_Python/issues/34)) — [como funciona (diagrama)](docs/diagrams/34-front-agui-http-agent.md)
+
+**A estudar — Tutorial A2UI Parte 2** ([`docs/tutorial_A2UI/02-ag-ui-copilotkit-angular.md`](docs/tutorial_A2UI/02-ag-ui-copilotkit-angular.md), baseado em [Agentic UI with Angular, CopilotKit, and AG-UI](https://www.angulararchitects.io/en/blog/implementing-ag-ui-with-angular/)):
+
+- [ ] `[Back]` Endpoint AG-UI com `POST` real, resolvendo o ciclo de tool call client-side ([#45](https://github.com/doljak-projects/A2UI_A17_Python/issues/45))
+- [ ] `[Front]` Instalar e configurar o CopilotKit (`provideCopilotKit`) ([#46](https://github.com/doljak-projects/A2UI_A17_Python/issues/46))
+- [ ] `[Front]` Agent store: `AppHttpAgent` + `initAgentStore` + `injectAgentStore` ([#47](https://github.com/doljak-projects/A2UI_A17_Python/issues/47))
 
 ### A2UI — Frontend agêntico
 
@@ -167,11 +173,17 @@ Cada item será rastreado como uma issue no repositório. O objetivo é cobrir t
 - [ ] Implementar o **catálogo de componentes A2UI** (registro de componentes renderizáveis por nome)
 - [ ] Construir o **renderer A2UI** (lê eventos AG-UI via Signal e renderiza componentes do catálogo dinamicamente)
 
-**A estudar — Tutorial A2UI Parte 1** ([`docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md`](docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md)):
+**Tutorial A2UI Parte 1** ([`docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md`](docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md)) — **concluída**:
 
 - [x] `[Back]` Ligar a tool `get_weather` existente como server-side tool call do AG-UI ([#33](https://github.com/doljak-projects/A2UI_A17_Python/issues/33)) — [como funciona (diagrama)](docs/diagrams/backend-agui-agent.md)
-- [ ] `[Front]` Definir schema client-side (`Tool` + zod) de clima para renderização no chat ([#35](https://github.com/doljak-projects/A2UI_A17_Python/issues/35))
-- [ ] `[Front]` Ciclo de duas runs para resultado de tool call client-side ([#36](https://github.com/doljak-projects/A2UI_A17_Python/issues/36))
+- [x] `[Front]` Definir schema client-side (`Tool` + zod) de clima para renderização no chat ([#35](https://github.com/doljak-projects/A2UI_A17_Python/issues/35))
+- [x] `[Front]` Ciclo de duas runs para resultado de tool call client-side ([#36](https://github.com/doljak-projects/A2UI_A17_Python/issues/36))
+
+**A estudar — Tutorial A2UI Parte 2** ([`docs/tutorial_A2UI/02-ag-ui-copilotkit-angular.md`](docs/tutorial_A2UI/02-ag-ui-copilotkit-angular.md)):
+
+- [ ] `[Front]` Tool de clima via `createFrontendTool`, sem o ciclo manual de duas runs ([#48](https://github.com/doljak-projects/A2UI_A17_Python/issues/48))
+- [ ] `[Front]` Widget de clima renderizado via `copilot-render-tool-calls` ([#49](https://github.com/doljak-projects/A2UI_A17_Python/issues/49))
+- [ ] `[Front]` UI de chat sidecar ligada ao agent store do CopilotKit ([#50](https://github.com/doljak-projects/A2UI_A17_Python/issues/50))
 
 ---
 
