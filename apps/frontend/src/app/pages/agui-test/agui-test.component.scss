@@ -1,0 +1,19 @@
+.agui-test {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  max-width: 32rem;
+}
+
+.status {
+  margin: 0;
+
+  &--done {
+    color: green;
+  }
+
+  &--error {
+    color: red;
+  }
+}

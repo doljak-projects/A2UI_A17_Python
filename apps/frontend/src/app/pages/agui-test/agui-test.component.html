@@ -1,0 +1,25 @@
+<section class="agui-test">
+  <h2>AG-UI — teste de transporte (issue #34)</h2>
+  <p>
+    Dispara <code>addMessage</code> + <code>runAgent</code> contra
+    <code>GET /api/agui/weather-tool-demo</code>. Abra o console para ver os
+    eventos recebidos.
+  </p>
+
+  <button mat-flat-button color="primary" [disabled]="status() === 'running'" (click)="runAgent()">
+    @if (status() === 'running') {
+      <mat-spinner diameter="20"></mat-spinner>
+    } @else {
+      Rodar agente
+    }
+  </button>
+
+  @switch (status()) {
+    @case ('done') {
+      <p class="status status--done">Run finalizada — confira o console.</p>
+    }
+    @case ('error') {
+      <p class="status status--error">Falha na run — confira o console.</p>
+    }
+  }
+</section>
