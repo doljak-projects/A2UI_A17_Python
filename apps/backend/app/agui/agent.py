@@ -16,6 +16,7 @@ from ag_ui.core import (
     ToolCallEndEvent,
     ToolCallResultEvent,
     ToolCallStartEvent,
+    ToolMessage,
 )
 
 from app.services.weather import get_weather
@@ -81,6 +82,59 @@ class WeatherClientToolCallAgent(AGUIAgent):
         yield ToolCallEndEvent(tool_call_id=self.TOOL_CALL_ID)
 
         yield RunFinishedEvent(thread_id=input.thread_id, run_id=input.run_id)
+
+
+class WeatherResumableToolCallAgent(AGUIAgent):
+    """Demo da issue #45: recebe um `RunAgentInput` real via POST (com corpo),
+    ao contrário das demos GET (#32/#33/#36). Ainda sem a lógica de
+    ramificação (Passo 2+) — por enquanto só valida que o corpo real chega
+    até aqui.
+    """
+
+    TOOL_CALL_ID = "5001"
+    MESSAGE_ID = "5002"
+    CITY = "São Paulo"
+
+    def run(self, input: RunAgentInput) -> Iterator[BaseEvent]:
+        yield RunStartedEvent(thread_id=input.thread_id, run_id=input.run_id)
+
+        tool_result = self._find_tool_result(input)
+        if tool_result is None:
+            yield from self._request_tool_call()
+        else:
+            yield from self._acknowledge_tool_result(tool_result)
+
+        yield RunFinishedEvent(thread_id=input.thread_id, run_id=input.run_id)
+
+    def _request_tool_call(self) -> Iterator[BaseEvent]:
+        yield ToolCallStartEvent(tool_call_id=self.TOOL_CALL_ID, tool_call_name="show_weather")
+        yield ToolCallArgsEvent(
+            tool_call_id=self.TOOL_CALL_ID,
+            delta=json.dumps({"city": self.CITY}, ensure_ascii=False),
+        )
+        yield ToolCallEndEvent(tool_call_id=self.TOOL_CALL_ID)
+
+    def _acknowledge_tool_result(self, tool_result: ToolMessage) -> Iterator[BaseEvent]:
+        weather = json.loads(tool_result.content)
+        reply = (
+            f"Recebi o clima de {weather['city']}: {weather['temperature_c']}°C, "
+            f"{weather['description']}, umidade {weather['humidity']}%."
+        )
+
+        yield TextMessageStartEvent(message_id=self.MESSAGE_ID, role="assistant")
+        yield TextMessageContentEvent(message_id=self.MESSAGE_ID, delta=reply)
+        yield TextMessageEndEvent(message_id=self.MESSAGE_ID)
+
+    def _find_tool_result(self, input: RunAgentInput) -> ToolMessage | None:
+        """Backend é stateless entre requisições — a única forma de saber se
+        o cliente já resolveu a tool call é procurar, no `messages` que ele
+        reenviou, uma `ToolMessage` respondendo ao `TOOL_CALL_ID` desta
+        instância.
+        """
+        for message in input.messages:
+            if isinstance(message, ToolMessage) and message.tool_call_id == self.TOOL_CALL_ID:
+                return message
+        return None
 
 
 class WeatherToolCallAgent(AGUIAgent):

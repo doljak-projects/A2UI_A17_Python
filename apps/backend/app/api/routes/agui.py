@@ -12,6 +12,7 @@ from app.agui.agent import (
     AGUIAgent,
     WeatherChatAgent,
     WeatherClientToolCallAgent,
+    WeatherResumableToolCallAgent,
     WeatherToolCallAgent,
 )
 
@@ -50,24 +51,35 @@ def agui_weather_tool_client_demo() -> StreamingResponse:
     return _stream(WeatherClientToolCallAgent())
 
 
-def _stream(agent: AGUIAgent) -> StreamingResponse:
+@router.post("/agui/weather-tool-agent-demo")
+def agui_weather_tool_agent_demo(run_input: RunAgentInput) -> StreamingResponse:
+    """Demo funcional da issue #45: primeira rota AG-UI com corpo real (POST),
+    ao contrário das demos GET (#32/#33/#36) que sempre montam um
+    `RunAgentInput` vazio internamente. `RunAgentInput` já é um modelo
+    Pydantic (`ag_ui.core`), então o FastAPI valida/parseia o corpo sozinho.
+    """
+    return _stream(WeatherResumableToolCallAgent(), run_input)
+
+
+def _stream(agent: AGUIAgent, run_input: RunAgentInput | None = None) -> StreamingResponse:
     return StreamingResponse(
-        _event_stream(agent),
+        _event_stream(agent, run_input),
         media_type="text/event-stream",
         headers=SSE_HEADERS,
     )
 
 
-def _event_stream(agent: AGUIAgent) -> Iterator[str]:
-    run_input = RunAgentInput(
-        thread_id=str(uuid.uuid4()),
-        run_id=str(uuid.uuid4()),
-        state=None,
-        messages=[],
-        tools=[],
-        context=[],
-        forwarded_props={},
-    )
+def _event_stream(agent: AGUIAgent, run_input: RunAgentInput | None) -> Iterator[str]:
+    if run_input is None:
+        run_input = RunAgentInput(
+            thread_id=str(uuid.uuid4()),
+            run_id=str(uuid.uuid4()),
+            state=None,
+            messages=[],
+            tools=[],
+            context=[],
+            forwarded_props={},
+        )
     encoder = EventEncoder()
 
     try:
