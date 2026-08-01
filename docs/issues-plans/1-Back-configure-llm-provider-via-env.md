@@ -6,7 +6,7 @@ status: closed
 last_updated: 07-25-2026
 ---
 
-# Issue #1 — BE: Configurar provedor LLM via .env e pydantic-settings
+# Issue #1 — Configurar provedor LLM via .env e pydantic-settings
 
 ## Status
 Feita — configuração do provedor LLM integrada ao `Settings` com validação e testes.
@@ -26,4 +26,3 @@ Feita — configuração do provedor LLM integrada ao `Settings` com validação
 ## Notes
 - `llm_api_key` usa `SecretStr` para evitar vazamento em logs/repr.
 - Critério de conclusão atendido: `settings.llm_api_key` e `settings.llm_model` disponíveis e testados (4 testes passando).
-- Commit/push/PR permanecem manuais (conforme preferência do projeto).

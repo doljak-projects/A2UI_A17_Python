@@ -32,4 +32,3 @@ Feita — servidor MCP espelhando o `ToolRegistry`, montado na própria app Fast
 - Resultado `dict` da tool vira `structuredContent`; outros tipos viram texto, porque o protocolo não transporta valores soltos.
 - Listar tools **não** exige `WEATHER_API_KEY` — o `get_weather` só falha na execução. Há teste garantindo isso.
 - Validação: 50 testes passando, `ruff check` limpo, e um cliente MCP real por HTTP (`streamablehttp_client` na porta 8131) listando `echo` e `get_weather`, invocando `echo` (`{'message': 'mcp funcionando'}`), invocando `get_weather('Curitiba')` contra a WeatherAPI real (`17.3 C, Parcialmente nublado, 72%`) e recebendo `isError=true` ao chamar tool inexistente.
-- Esta issue foi implementada por um subagente que foi interrompido perto do fim; a documentação de rastreio, a validação com cliente externo e a checagem de lint foram concluídas em seguida.
