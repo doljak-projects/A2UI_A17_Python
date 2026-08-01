@@ -27,4 +27,10 @@ describe('AguiAgentService', () => {
   it('devolve sempre a mesma instância (thread compartilhada)', () => {
     expect(service.getAgent()).toBe(service.getAgent());
   });
+
+  it('pointAt troca a URL da instância compartilhada', () => {
+    service.pointAt('/agui/demo');
+
+    expect(service.getAgent().url).toBe(`${environment.apiBaseUrl}/agui/demo`);
+  });
 });
