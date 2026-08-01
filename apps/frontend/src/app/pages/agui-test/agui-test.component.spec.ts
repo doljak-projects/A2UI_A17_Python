@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 import { AguiAgentService } from '../../core/services/agui-agent.service';
+import { showWeatherTool } from '../../core/services/weather-tool-for-a2ui';
 import { AguiTestComponent } from './agui-test.component';
 
 class StubAgent {
@@ -52,7 +53,7 @@ describe('AguiTestComponent', () => {
     expect(aguiAgentService.agent.addMessage).toHaveBeenCalledWith(
       jasmine.objectContaining({ role: 'user', content: jasmine.any(String) }),
     );
-    expect(aguiAgentService.agent.runAgent).toHaveBeenCalled();
+    expect(aguiAgentService.agent.runAgent).toHaveBeenCalledWith({ tools: [showWeatherTool] });
     expect(component.status()).toBe('done');
   });
 
