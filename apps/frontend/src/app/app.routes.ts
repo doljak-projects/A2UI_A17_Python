@@ -12,5 +12,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/home/home.component').then((m) => m.HomeComponent),
   },
+  {
+    path: 'agui-test',
+    loadComponent: () =>
+      import('./pages/agui-test/agui-test.component').then((m) => m.AguiTestComponent),
+  },
   { path: '**', redirectTo: 'chat' },
 ];

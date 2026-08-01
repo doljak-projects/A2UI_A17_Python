@@ -8,6 +8,9 @@ last_updated: 07-28-2026
 
 # Issue #32 — Agent skeleton emitting RUN_STARTED/TEXT_MESSAGE/RUN_FINISHED events
 
+## Diagrama
+Ver [`docs/diagrams/backend-agui-agent.md`](../diagrams/backend-agui-agent.md) — hierarquia de classes e fluxo requisição → SSE (cobre #32 e #33).
+
 ## Objective
 Implement a minimal AG-UI-compliant agent skeleton that emits the core event sequence of a chat turn (`RUN_STARTED` → `TEXT_MESSAGE_START/CONTENT/END` → `RUN_FINISHED`), with no LLM call involved yet — the goal is to validate the AG-UI event format itself, following the tutorial "AG-UI in Practice: The SDK for TypeScript".
 

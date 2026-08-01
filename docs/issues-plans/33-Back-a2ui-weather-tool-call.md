@@ -8,6 +8,9 @@ last_updated: 07-28-2026
 
 # Issue #33 — Wire existing get_weather tool as an AG-UI server-side tool call
 
+## Diagrama
+Ver [`docs/diagrams/backend-agui-agent.md`](../diagrams/backend-agui-agent.md) — hierarquia de classes e fluxo requisição → SSE (cobre #32 e #33).
+
 ## Objective
 Extend the AG-UI agent skeleton from issue #32 so that, within the same `run`, it emits a server-side tool call sequence and resolves it using the project's existing `get_weather(city)` tool (`apps/backend/app/services/weather.py`, issue #5), instead of mocking the result as the original tutorial does.
 
