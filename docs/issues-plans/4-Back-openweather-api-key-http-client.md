@@ -9,7 +9,7 @@ last_updated: 07-25-2026
 # Issue #4 — BE: Registrar e configurar chave da OpenWeatherMap
 
 ## Status
-Feita — chave, base URL e cliente HTTP autenticado configurados e testados.
+Feita — chave, base URL e cliente HTTP autenticado configurados e testados. **Supersedida pela #14** (migração para WeatherAPI.com).
 
 ## O que foi feito
 - `Settings` (`app/core/config.py`): adicionados `openweather_api_key` (`SecretStr`, opcional) e `openweather_base_url` (default `https://api.openweathermap.org/data/2.5`), mais a propriedade `openweather_configured`.
@@ -26,6 +26,6 @@ Feita — chave, base URL e cliente HTTP autenticado configurados e testados.
 
 ## Notes
 - Decisão de design: a chave da OpenWeatherMap é **opcional** no `Settings` (diferente da `llm_api_key`, que é obrigatória). Sem a chave, a aplicação sobe normalmente e apenas o `WeatherClient` falha na instanciação com `MissingOpenWeatherApiKeyError`. Isso evita que uma integração acessória bloqueie o boot do backend.
-- Critério de conclusão atendido: cliente instanciado e autenticado, retornando JSON válido — validado com `MockTransport`, sem consumir cota da API real. Para validar contra a API real, basta definir `OPENWEATHER_API_KEY` no `.env` e chamar `WeatherClient().get_current_weather("São Paulo")`.
+- Critério de conclusão atendido: cliente instanciado e autenticado, retornando JSON válido — validado com `MockTransport`, sem consumir cota da API real.
+- **Histórico:** o provedor foi migrado para WeatherAPI.com na issue #14; os campos `openweather_*` foram renomeados para `weather_*`.
 - Conflito previsto: a issue #2 também adiciona `httpx` ao `requirements.txt`. Se as duas branches forem mergeadas, resolver mantendo uma única linha.
-- Commit/push/PR permanecem manuais.
