@@ -185,6 +185,13 @@ Cada item será rastreado como uma issue no repositório. O objetivo é cobrir t
 - [ ] `[Front]` Widget de clima renderizado via `copilot-render-tool-calls` ([#49](https://github.com/doljak-projects/A2UI_A17_Python/issues/49))
 - [ ] `[Front]` UI de chat sidecar ligada ao agent store do CopilotKit ([#50](https://github.com/doljak-projects/A2UI_A17_Python/issues/50))
 
+**A estudar — Tutorial A2UI Parte 3** ([`docs/tutorial_A2UI/03-google-a2ui-dynamic-ui.md`](docs/tutorial_A2UI/03-google-a2ui-dynamic-ui.md), protocolo **A2UI da Google** — nome coincide com o do projeto, mas são coisas diferentes; issues marcadas `-GOOGLE-A2UI-`):
+
+- [ ] `[Front]` Instalar e configurar o SDK A2UI (`@a2ui/angular`, `@a2ui/web_core`) ([#52](https://github.com/doljak-projects/A2UI_A17_Python/issues/52))
+- [ ] `[Front]` Renderizar card estático via `createSurface`/`updateComponents`/`updateDataModel` ([#53](https://github.com/doljak-projects/A2UI_A17_Python/issues/53))
+- [ ] `[Front]` Modelar o card de clima com o `WeatherToolResult` existente ([#54](https://github.com/doljak-projects/A2UI_A17_Python/issues/54))
+- [ ] `[Front]` Ação do cliente pra atualizar o card no lugar (`onAction`) ([#55](https://github.com/doljak-projects/A2UI_A17_Python/issues/55))
+
 ---
 
 ## Estado atual
