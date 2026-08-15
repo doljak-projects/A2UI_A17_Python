@@ -1,4 +1,4 @@
-# A2UI — POC Agêntica com AG-UI + Angular 17
+# A2UI — POC Agêntica com AG-UI + Angular 21
 
 POC de estudo explorando o uso combinado de **A2UI** (design system Angular Material) e **AG-UI Protocol** para construção de uma interface Angular verdadeiramente agêntica, onde componentes de UI são renderizados dinamicamente a partir de um catálogo JSON dirigido por um LLM via streaming.
 
@@ -8,19 +8,21 @@ O fluxo central é: usuário interage via chat → LLM escolhe tools (WeatherAPI
 
 | Camada | Tecnologia |
 |---|---|
-| Frontend | Angular 17 (standalone + Signals) + Angular Material |
+| Frontend | Angular 21 (standalone + Signals) + Angular Material |
 | Backend | Python 3.11 / FastAPI |
 | Protocolo agêntico | AG-UI (client + server) |
 | LLM | Configurável via `.env` (OpenAI / Anthropic) |
 | API externa | OpenWeatherMap (via tool call) |
 | MCP | Tools expostas via MCP server no backend |
 
+> **Por que Angular 21?** O projeto começou na v17, mas os SDKs oficiais necessários para as próximas partes do tutorial exigem versões mais novas: `@copilotkit/angular` exige Angular `^20 || ^21 || ^22`, e `@a2ui/angular` (SDK do protocolo A2UI da Google) exige `^21.2.5` — nenhuma versão publicada de nenhum dos dois suporta Angular 17. A migração foi feita de forma sequencial (`17 → 18 → 19 → 20 → 21`, via `ng update` a cada major, já que os schematics de migração automática só se aplicam passo a passo) na issue [#59](https://github.com/doljak-projects/A2UI_A17_Python/issues/59), validando build e testes a cada etapa. Angular 21 foi o alvo escolhido por ser a versão mínima que satisfaz os peer ranges dos dois SDKs simultaneamente, sem precisar ir até a 22.
+
 ## Estrutura
 
 ```
 a2ui/
 ├── apps/
-│   ├── frontend/   # Angular 17 + Angular Material (Design System)
+│   ├── frontend/   # Angular 21 + Angular Material (Design System)
 │   └── backend/    # Python + FastAPI (estrutura base)
 ├── package.json    # workspace raiz + scripts de conveniência
 ├── .editorconfig
@@ -47,7 +49,7 @@ Pré-requisitos: venv criado em `apps/backend/.venv` e `.env` preenchido (veja a
 | Backend (Swagger) | http://localhost:8000/docs |
 | MCP Server | http://localhost:8000/mcp |
 
-## Frontend (Angular 17 + Material)
+## Frontend (Angular 21 + Material)
 
 ```bash
 npm install                 # instala deps do workspace frontend
