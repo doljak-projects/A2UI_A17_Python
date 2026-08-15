@@ -27,18 +27,17 @@ export interface UiMessage {
 const TYPEWRITER_INTERVAL_MS = 18;
 
 @Component({
-  selector: 'app-chat',
-  standalone: true,
-  imports: [
-    FormsModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
-  ],
-  templateUrl: './chat.component.html',
-  styleUrl: './chat.component.scss',
+    selector: 'app-chat',
+    imports: [
+        FormsModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatProgressSpinnerModule,
+    ],
+    templateUrl: './chat.component.html',
+    styleUrl: './chat.component.scss'
 })
 export class ChatComponent implements AfterViewChecked, OnDestroy {
   private readonly chatService = inject(ChatService);

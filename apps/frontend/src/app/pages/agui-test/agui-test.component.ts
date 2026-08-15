@@ -22,11 +22,10 @@ type RunStatus = 'idle' | 'running' | 'done' | 'error';
  * Não integra com `ChatComponent`/`ChatService`.
  */
 @Component({
-  selector: 'app-agui-test',
-  standalone: true,
-  imports: [MatButtonModule, MatProgressSpinnerModule],
-  templateUrl: './agui-test.component.html',
-  styleUrl: './agui-test.component.scss',
+    selector: 'app-agui-test',
+    imports: [MatButtonModule, MatProgressSpinnerModule],
+    templateUrl: './agui-test.component.html',
+    styleUrl: './agui-test.component.scss'
 })
 export class AguiTestComponent {
   private readonly aguiAgentService = inject(AguiAgentService);
