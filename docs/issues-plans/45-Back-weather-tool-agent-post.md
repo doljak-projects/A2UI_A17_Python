@@ -2,8 +2,8 @@
 issue: 45
 title: "[Back] -AG-UI- Accept a real RunAgentInput via POST for a resumable weather tool-call agent"
 branch: feat/weather-tool-post-45-resumable-agent
-status: ready-for-review
-last_updated: 2026-08-01
+status: closed
+last_updated: 08-15-2026
 ---
 
 # Issue #45 — Accept a real RunAgentInput via POST for a resumable weather tool-call agent
