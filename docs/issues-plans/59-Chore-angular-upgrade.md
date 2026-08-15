@@ -2,7 +2,7 @@
 issue: 59
 title: "[Front] [Chore] Upgrade Angular from 17 to 21 (unblocks CopilotKit/A2UI Angular SDKs)"
 branch: chore/angular-upgrade-59-17-to-22
-status: in-progress
+status: closed
 last_updated: 2026-08-15
 ---
 
@@ -26,9 +26,9 @@ Mesmo formato mentorado das demais: conceito explicado antes de cada passo, conf
 - [x] Passo 0 — Baseline (Angular 17.3): `ng test` 36/39 (mesmas 3 falhas pré-existentes de `chat.component.spec.ts`), `ng build` limpo (bundle inicial 451.60 kB).
 - [x] Passo 1 — 17 → 18 (`ng update @angular/core@18 @angular/cli@18 @angular/material@18`). Migrations automáticas aplicadas: Angular CDK/Material atualizados; `styles.scss` migrado pra API M2 renomeada (`mat.define-palette` → `mat.m2-define-palette`, etc.). Build e `ng test` (36/39, mesmas 3 falhas pré-existentes) confirmados no Angular 18.2.21.
 - [x] Passo 2 — 18 → 19 (`ng update @angular/core@19 @angular/cli@19 @angular/material@19`). Migrations automáticas aplicadas: remoção de `standalone: true` redundante em 4 componentes; `styles.scss` — `mat.core()` substituído por `mat.elevation-classes()` + `mat.app-background()`; CDK/Material em `^19.2.x`, TypeScript `~5.8.3`, zone.js `~0.15.1`. Reinstall de `node_modules`/lockfile necessário pra resolver `@angular/animations` ausente. Build limpo (bundle inicial 473.22 kB) e `ng test` 36/39 confirmados; smoke test em `/`, `/chat`, `/agui-test` ok. Commitado (`41e265f`).
-- [x] Passo 3 — 19 → 20 (`ng update @angular/core@20 @angular/cli@20 @angular/material@20`; CDK sobe junto via `@angular/material`). Migrations automáticas aplicadas: `angular.json` — defaults de schematics do workspace (style guide v20); `tsconfig.json` — `moduleResolution` de `node` para `bundler`. Sem reinstall extra necessário. Build limpo (bundle inicial 481.28 kB) e `ng test` 36/39 confirmados; smoke test em `/`, `/chat`, `/agui-test` ok. **Não commitado** — aguardando confirmação antes do Passo 4.
-- [ ] Passo 4 — 20 → 21
-- [ ] Passo 5 — Validação final: build, testes, `/agui-test` funcional; instalar `@copilotkit/angular`/`@a2ui/angular` de teste pra confirmar que resolvem
+- [x] Passo 3 — 19 → 20 (`ng update @angular/core@20 @angular/cli@20 @angular/material@20`; CDK sobe junto via `@angular/material`). Migrations automáticas aplicadas: `angular.json` — defaults de schematics do workspace (style guide v20); `tsconfig.json` — `moduleResolution` de `node` para `bundler`. Sem reinstall extra necessário. Build limpo (bundle inicial 481.28 kB) e `ng test` 36/39 confirmados; smoke test ok. Commitado (`166355f`).
+- [x] Passo 4 — 20 → 21 (bump manual de `package.json` + `npm install` — `ng update` falhou com "Found 0 dependencies" no workspace npm; migrations via `ng update --migrate-only`). Angular `^21.2.19`, Material/CDK `^21.2.14`, TypeScript `~5.9.2` (peer exigido pelo build-angular 21). Migration: `tsconfig.json` — remoção de `lib` explícito (CLI usa es2022+ por default). Build limpo (bundle inicial 491.25 kB) e `ng test` 36/39 confirmados.
+- [x] Passo 5 — Validação final: build e testes confirmados no Angular 21.2.x; `@copilotkit/angular@0.3.1` e `@a2ui/angular@0.10.5` instalam sem erros de peer dependency (issues #46 e #52 desbloqueadas) — pacotes removidos após teste, integração fica nas issues próprias.
 
 ## Notes
 - Backend (Python) não é afetado por esta issue.
