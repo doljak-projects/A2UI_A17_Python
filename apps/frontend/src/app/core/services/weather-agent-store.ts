@@ -4,6 +4,7 @@ import { HttpAgent } from '@ag-ui/client';
 
 import { environment } from '../../../environments/environment';
 import { buildMockWeatherResult, weatherToolArgsSchema } from './weather-frontend-tool';
+import { WeatherWidgetComponent } from '../../components/weather-widget/weather-widget.component';
 
 const WEATHER_AGENT_ID = 'weather-agent';
 
@@ -34,6 +35,7 @@ function initAgentStore(): void {
     name: 'show_weather',
     description: 'Exibe as condições climáticas atuais de uma cidade.',
     parameters: weatherToolArgsSchema,
+    component: WeatherWidgetComponent,
     agentId: WEATHER_AGENT_ID,
     handler: async ({ city }) => buildMockWeatherResult(city),
   });

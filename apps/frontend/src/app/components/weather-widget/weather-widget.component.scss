@@ -1,0 +1,29 @@
+.weather-widget {
+  margin-top: 8px;
+  max-width: 280px;
+}
+
+.weather-widget__loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(0, 0, 0, 0.67);
+}
+
+.weather-widget__temperature {
+  margin: 0 0 4px;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.weather-widget__description,
+.weather-widget__humidity {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.weather-widget__humidity {
+  margin-top: 4px;
+  color: rgba(0, 0, 0, 0.67);
+  font-size: 0.875rem;
+}

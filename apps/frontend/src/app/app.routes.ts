@@ -17,5 +17,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/agui-test/agui-test.component').then((m) => m.AguiTestComponent),
   },
+  {
+    path: 'copilot-weather-chat',
+    loadComponent: () =>
+      import('./pages/copilot-weather-chat/copilot-weather-chat.component').then(
+        (m) => m.CopilotWeatherChatComponent,
+      ),
+  },
   { path: '**', redirectTo: 'chat' },
 ];
