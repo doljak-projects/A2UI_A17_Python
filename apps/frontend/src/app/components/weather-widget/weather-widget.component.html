@@ -1,0 +1,20 @@
+<mat-card class="weather-widget" appearance="outlined">
+  <mat-card-header>
+    <mat-icon mat-card-avatar>cloud</mat-icon>
+    <mat-card-title>{{ city() }}</mat-card-title>
+    <mat-card-subtitle>Condições atuais</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    @if (isLoading()) {
+      <div class="weather-widget__loading">
+        <mat-spinner diameter="24"></mat-spinner>
+        <span>Consultando clima…</span>
+      </div>
+    } @else if (weather(); as data) {
+      <p class="weather-widget__temperature">{{ data.temperature_c }}°C</p>
+      <p class="weather-widget__description">{{ data.description }}</p>
+      <p class="weather-widget__humidity">Umidade: {{ data.humidity }}%</p>
+    }
+  </mat-card-content>
+</mat-card>

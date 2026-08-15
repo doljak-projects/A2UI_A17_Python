@@ -1,0 +1,73 @@
+<section class="copilot-weather-chat">
+  <header class="copilot-weather-chat__header">
+    <h2>CopilotKit — chat sidecar (issue #50)</h2>
+    <p>
+      UI de demonstração isolada ligada ao agent store
+      <code>weather-agent</code> (endpoint
+      <code>POST /api/agui/weather-tool-agent-demo</code>). Pergunte o clima de
+      uma cidade — o CopilotKit resolve a tool <code>show_weather</code> numa
+      única run.
+    </p>
+  </header>
+
+  <div class="copilot-weather-chat__messages" aria-live="polite">
+    @for (message of messages(); track message.id) {
+      @switch (message.role) {
+        @case ('user') {
+          <div class="bubble bubble-user">
+            {{ message.content }}
+          </div>
+        }
+        @case ('assistant') {
+          <div class="bubble bubble-assistant">
+            @if (message.content) {
+              <p class="assistant-text">{{ message.content }}</p>
+            }
+            @if (asAssistantMessage(message); as assistant) {
+              @if (assistant.toolCalls?.length) {
+                <copilot-render-tool-calls
+                  [message]="assistant"
+                  [messages]="messages()"
+                  [isLoading]="isRunning()"
+                  [agentId]="weatherAgentId"
+                />
+              }
+            }
+            @if (!message.content && isRunning()) {
+              <mat-spinner diameter="20"></mat-spinner>
+            }
+          </div>
+        }
+      }
+    }
+    <div #scrollAnchor class="scroll-anchor"></div>
+  </div>
+
+  @if (error()) {
+    <p class="copilot-weather-chat__error" role="alert">{{ error() }}</p>
+  }
+
+  <form class="copilot-weather-chat__input" (ngSubmit)="send()">
+    <mat-form-field class="copilot-weather-chat__field" appearance="outline">
+      <mat-label>Mensagem</mat-label>
+      <textarea
+        matInput
+        name="message"
+        rows="2"
+        [(ngModel)]="userInput"
+        [disabled]="isRunning()"
+        placeholder="Ex.: Qual o clima em São Paulo?"
+      ></textarea>
+    </mat-form-field>
+
+    <button
+      mat-fab
+      color="primary"
+      type="submit"
+      aria-label="Enviar mensagem"
+      [disabled]="isRunning() || !userInput.trim()"
+    >
+      <mat-icon>send</mat-icon>
+    </button>
+  </form>
+</section>
