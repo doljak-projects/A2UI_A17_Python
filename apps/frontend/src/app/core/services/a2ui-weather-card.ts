@@ -1,19 +1,18 @@
 import type { A2uiMessage } from '@a2ui/web_core/v0_9';
 
-export interface SimpleCardData {
-  title: string;
-  subtitle: string;
-}
+import type { WeatherToolResult } from './weather-tool-for-a2ui';
 
 /**
  * Monta o ciclo mínimo de mensagens A2UI (createSurface -> updateComponents ->
- * updateDataModel) para um card estático com título e subtítulo, ligados ao
- * data model via `{ path }` em vez de valor embutido no componente.
+ * updateDataModel) para um card de clima, com os campos ligados ao data model
+ * via `{ path }` em vez de valor embutido no componente. Reaproveita o shape
+ * de `WeatherToolResult` (issue #35) — mesmos nomes de campo do JSON real
+ * emitido por `get_weather` no backend.
  */
-export function createSimpleCard(
+export function createWeatherCard(
   surfaceId: string,
   catalogId: string,
-  data: SimpleCardData,
+  data: WeatherToolResult,
 ): A2uiMessage[] {
   return [
     {
@@ -32,19 +31,31 @@ export function createSimpleCard(
           {
             id: 'card-column',
             component: 'Column',
-            children: ['card-title', 'card-subtitle'],
+            children: ['card-city', 'card-temperature', 'card-description', 'card-humidity'],
           },
           {
-            id: 'card-title',
+            id: 'card-city',
             component: 'Text',
             variant: 'h3',
-            text: { path: '/title' },
+            text: { path: '/city' },
           },
           {
-            id: 'card-subtitle',
+            id: 'card-temperature',
             component: 'Text',
             variant: 'body',
-            text: { path: '/subtitle' },
+            text: { path: '/temperature_c' },
+          },
+          {
+            id: 'card-description',
+            component: 'Text',
+            variant: 'body',
+            text: { path: '/description' },
+          },
+          {
+            id: 'card-humidity',
+            component: 'Text',
+            variant: 'caption',
+            text: { path: '/humidity' },
           },
         ],
       },

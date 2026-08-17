@@ -1,12 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { A2uiRendererService, BasicCatalog, SurfaceComponent } from '@a2ui/angular/v0_9';
 
-import { createSimpleCard } from '../../core/services/a2ui-simple-card';
+import { createWeatherCard } from '../../core/services/a2ui-weather-card';
+import { buildMockWeatherResult } from '../../core/services/weather-tool-for-a2ui';
 
 const SURFACE_ID = 'a2ui-test-surface';
 
 /**
- * Ponto de entrada isolado da issue #53: ciclo mínimo createSurface ->
+ * Ponto de entrada isolado das issues #53/#54: ciclo mínimo createSurface ->
  * updateComponents -> updateDataModel do protocolo A2UI da Google, exibido
  * via <a2ui-v09-surface>. Não integra com nenhuma outra página.
  */
@@ -23,10 +24,11 @@ export class A2uiTestComponent implements OnInit {
   readonly surfaceId = SURFACE_ID;
 
   ngOnInit(): void {
-    const messages = createSimpleCard(SURFACE_ID, this.catalog.id, {
-      title: 'Card estático A2UI',
-      subtitle: 'Renderizado via createSurface / updateComponents / updateDataModel',
-    });
+    const messages = createWeatherCard(
+      SURFACE_ID,
+      this.catalog.id,
+      buildMockWeatherResult('São Paulo'),
+    );
     this.renderer.processMessages(messages);
   }
 }
