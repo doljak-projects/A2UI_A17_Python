@@ -18,6 +18,11 @@ export const routes: Routes = [
       import('./pages/agui-test/agui-test.component').then((m) => m.AguiTestComponent),
   },
   {
+    path: 'a2ui-test',
+    loadComponent: () =>
+      import('./pages/a2ui-test/a2ui-test.component').then((m) => m.A2uiTestComponent),
+  },
+  {
     path: 'copilot-weather-chat',
     loadComponent: () =>
       import('./pages/copilot-weather-chat/copilot-weather-chat.component').then(
