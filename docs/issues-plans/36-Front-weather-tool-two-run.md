@@ -2,8 +2,8 @@
 issue: 36
 title: "[Front] -A2UI- Two-run cycle for client-side weather tool call result"
 branch: feat/weather-tool-two-run-36-client-side-cycle
-status: ready-for-review
-last_updated: 2026-08-01
+status: closed
+last_updated: 08-17-2026
 ---
 
 # Issue #36 — Two-run cycle for client-side weather tool call result
