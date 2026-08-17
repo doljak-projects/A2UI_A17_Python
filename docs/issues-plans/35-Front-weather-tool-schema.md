@@ -2,8 +2,8 @@
 issue: 35
 title: "[Front] -A2UI- Define client-side weather Tool schema for chat rendering"
 branch: feat/weather-tool-schema-35-client-side-definition
-status: ready-for-review
-last_updated: 2026-08-01
+status: closed
+last_updated: 08-17-2026
 ---
 
 # Issue #35 — Define client-side weather Tool schema for chat rendering
