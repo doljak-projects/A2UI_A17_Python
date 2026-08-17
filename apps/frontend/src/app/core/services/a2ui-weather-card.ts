@@ -2,6 +2,9 @@ import type { A2uiMessage } from '@a2ui/web_core/v0_9';
 
 import type { WeatherToolResult } from './weather-tool-for-a2ui';
 
+/** Nome da ação disparada pelo botão de refresh do card (issue #55). */
+export const REFRESH_WEATHER_ACTION = 'refreshWeather';
+
 /**
  * Monta o ciclo mínimo de mensagens A2UI (createSurface -> updateComponents ->
  * updateDataModel) para um card de clima, com os campos ligados ao data model
@@ -31,7 +34,13 @@ export function createWeatherCard(
           {
             id: 'card-column',
             component: 'Column',
-            children: ['card-city', 'card-temperature', 'card-description', 'card-humidity'],
+            children: [
+              'card-city',
+              'card-temperature',
+              'card-description',
+              'card-humidity',
+              'refresh-button',
+            ],
           },
           {
             id: 'card-city',
@@ -57,9 +66,37 @@ export function createWeatherCard(
             variant: 'caption',
             text: { path: '/humidity' },
           },
+          {
+            id: 'refresh-button-label',
+            component: 'Text',
+            variant: 'body',
+            text: 'Atualizar',
+          },
+          {
+            id: 'refresh-button',
+            component: 'Button',
+            child: 'refresh-button-label',
+            // `action.event.name` é o identificador que chega em `A2uiClientAction.name`
+            // no handler de `renderer.surfaceGroup.onAction` (issue #55).
+            action: { event: { name: REFRESH_WEATHER_ACTION } },
+          },
         ],
       },
     },
+    {
+      version: 'v0.9',
+      updateDataModel: { surfaceId, value: data },
+    },
+  ];
+}
+
+/**
+ * Emite só a mensagem `updateDataModel`, sem recriar a surface nem a árvore
+ * de componentes — usado para atualizar o card no lugar em resposta à ação
+ * `refreshWeather` (issue #55).
+ */
+export function refreshWeatherCardData(surfaceId: string, data: WeatherToolResult): A2uiMessage[] {
+  return [
     {
       version: 'v0.9',
       updateDataModel: { surfaceId, value: data },
