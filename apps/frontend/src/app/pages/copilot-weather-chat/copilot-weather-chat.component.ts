@@ -8,21 +8,27 @@ import {
   signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AssistantMessage } from '@ag-ui/client';
+import { AssistantMessage, type ActivityMessage } from '@ag-ui/client';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
 import { CopilotKit, RenderToolCalls } from '@copilotkit/angular';
 
-import { injectWeatherAgentStore } from '../../core/services/weather-agent-store';
-
-const WEATHER_AGENT_ID = 'weather-agent';
+import { CopilotActivityComponent } from '../../components/copilot-activity/copilot-activity.component';
+import {
+  WEATHER_A2UI_AGENT_ID,
+  WEATHER_TOOL_AGENT_ID,
+  injectWeatherAgentStore,
+  type WeatherChatAgentMode,
+} from '../../core/services/weather-agent-store';
 
 /**
- * Demo isolada da issue #50: chat sidecar ligado ao agent store do CopilotKit
- * (`injectWeatherAgentStore`). Não integra com `ChatComponent`/`ChatService`.
+ * Demo das issues #50/#74: chat sidecar com suporte a mensagens `activity`
+ * (card A2UI renderizado via `A2uiActivityRenderer`, issue #73) além do modo
+ * de tool call client-side já existente (issue #45).
  */
 @Component({
   selector: 'app-copilot-weather-chat',
@@ -33,20 +39,30 @@ const WEATHER_AGENT_ID = 'weather-agent';
     MatIconModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatSelectModule,
     RenderToolCalls,
+    CopilotActivityComponent,
   ],
   templateUrl: './copilot-weather-chat.component.html',
   styleUrl: './copilot-weather-chat.component.scss',
 })
 export class CopilotWeatherChatComponent implements AfterViewChecked {
   private readonly copilotKit = inject(CopilotKit);
-  private readonly agentStore = injectWeatherAgentStore();
+  private readonly toolStore = injectWeatherAgentStore('tool');
+  private readonly a2uiStore = injectWeatherAgentStore('a2ui');
   private shouldScroll = false;
 
-  readonly weatherAgentId = WEATHER_AGENT_ID;
+  readonly agentMode = signal<WeatherChatAgentMode>('a2ui');
+  readonly agentStore = computed(() =>
+    this.agentMode() === 'tool' ? this.toolStore() : this.a2uiStore(),
+  );
   readonly messages = computed(() => this.agentStore().messages());
   readonly isRunning = computed(() => this.agentStore().isRunning());
   readonly error = signal<string | null>(null);
+
+  readonly activeAgentId = computed(() =>
+    this.agentMode() === 'tool' ? WEATHER_TOOL_AGENT_ID : WEATHER_A2UI_AGENT_ID,
+  );
 
   userInput = '';
 
@@ -61,6 +77,12 @@ export class CopilotWeatherChatComponent implements AfterViewChecked {
   asAssistantMessage(message: unknown): AssistantMessage | null {
     return message && typeof message === 'object' && (message as AssistantMessage).role === 'assistant'
       ? (message as AssistantMessage)
+      : null;
+  }
+
+  asActivityMessage(message: unknown): ActivityMessage | null {
+    return message && typeof message === 'object' && (message as ActivityMessage).role === 'activity'
+      ? (message as ActivityMessage)
       : null;
   }
 

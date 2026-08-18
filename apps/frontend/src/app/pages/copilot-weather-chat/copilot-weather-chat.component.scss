@@ -71,6 +71,18 @@
   gap: 12px;
 }
 
+.copilot-weather-chat__mode {
+  width: min(100%, 360px);
+  margin-bottom: 12px;
+}
+
+.bubble-activity {
+  align-self: stretch;
+  max-width: 100%;
+  background: transparent;
+  padding: 0;
+}
+
 .copilot-weather-chat__field {
   flex: 1;
 }

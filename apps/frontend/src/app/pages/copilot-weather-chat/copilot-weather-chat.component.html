@@ -1,14 +1,22 @@
 <section class="copilot-weather-chat">
   <header class="copilot-weather-chat__header">
-    <h2>CopilotKit — chat sidecar (issue #50)</h2>
+    <h2>CopilotKit — chat sidecar (issues #50/#74)</h2>
     <p>
-      UI de demonstração isolada ligada ao agent store
-      <code>weather-agent</code> (endpoint
-      <code>POST /api/agui/weather-tool-agent-demo</code>). Pergunte o clima de
-      uma cidade — o CopilotKit resolve a tool <code>show_weather</code> numa
-      única run.
+      Chat ligado ao agent store do CopilotKit. Modo
+      <strong>A2UI</strong> emite um card via <code>ACTIVITY_SNAPSHOT</code>
+      (issue #72), renderizado no chat pelo <code>A2uiActivityRenderer</code>
+      (issue #73); modo <strong>Tool call</strong> mantém a demo resumível da
+      issue #45.
     </p>
   </header>
+
+  <mat-form-field class="copilot-weather-chat__mode" appearance="outline">
+    <mat-label>Modo do agente</mat-label>
+    <mat-select [value]="agentMode()" (valueChange)="agentMode.set($event)">
+      <mat-option value="a2ui">A2UI (activity snapshot)</mat-option>
+      <mat-option value="tool">Tool call client-side (#45)</mat-option>
+    </mat-select>
+  </mat-form-field>
 
   <div class="copilot-weather-chat__messages" aria-live="polite">
     @for (message of messages(); track message.id) {
@@ -29,12 +37,22 @@
                   [message]="assistant"
                   [messages]="messages()"
                   [isLoading]="isRunning()"
-                  [agentId]="weatherAgentId"
+                  [agentId]="activeAgentId()"
                 />
               }
             }
             @if (!message.content && isRunning()) {
               <mat-spinner diameter="20"></mat-spinner>
+            }
+          </div>
+        }
+        @case ('activity') {
+          <div class="bubble bubble-activity">
+            @if (asActivityMessage(message); as activity) {
+              <app-copilot-activity
+                [message]="activity"
+                [agentId]="activeAgentId()"
+              />
             }
           </div>
         }
