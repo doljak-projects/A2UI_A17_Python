@@ -8,13 +8,15 @@ from anyio.to_thread import run_sync
 from fastapi import FastAPI
 from mcp.server.lowlevel import Server
 from mcp.server.streamable_http_manager import StreamableHTTPSessionManager
-from mcp.types import ContentBlock, TextContent
+from mcp.types import ContentBlock, Resource, TextContent
 from mcp.types import Tool as McpTool
 from starlette.routing import Route
 from starlette.types import Receive, Scope, Send
 
 import app.tools  # noqa: F401  (import pelo efeito de registrar as tools embutidas)
+from app.agui.a2ui_constants import WEATHER_MCP_RESOURCE_URI
 from app.core.config import settings
+from app.mcp.resources import read_weather_app_resource
 from app.tools.registry import ToolRegistry
 from app.tools.registry import registry as default_registry
 
@@ -39,9 +41,40 @@ def build_mcp_server(registry: ToolRegistry | None = None) -> Server[object, Any
                 name=tool.name,
                 description=tool.description,
                 inputSchema=tool.input_schema,
+                **(
+                    {
+                        "meta": {
+                            "ui": {
+                                "resourceUri": WEATHER_MCP_RESOURCE_URI,
+                            },
+                        },
+                    }
+                    if tool.name == "get_weather"
+                    else {}
+                ),
             )
             for tool in tools.list_tools()
         ]
+
+    @server.list_resources()
+    async def list_resources() -> list[Resource]:
+        return [
+            Resource(
+                uri=WEATHER_MCP_RESOURCE_URI,
+                name="Weather MCP App",
+                description="Widget HTML interativo para o resultado de get_weather.",
+                mimeType="text/html",
+            )
+        ]
+
+    @server.read_resource()
+    async def read_resource(uri: str) -> str:
+        # O SDK MCP entrega `uri` como `pydantic.AnyUrl`, não `str` — apesar da
+        # assinatura do decorator declarar `str`. `AnyUrl` não é igual a uma
+        # `str` equivalente (`AnyUrl(...) == "..."` é `False`), então comparar
+        # direto sempre falhava com "Recurso desconhecido" mesmo pro URI certo.
+        resource = read_weather_app_resource(str(uri))
+        return resource["text"]
 
     @server.call_tool()
     async def call_tool(
