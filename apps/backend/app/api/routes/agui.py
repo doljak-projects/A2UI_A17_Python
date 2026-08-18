@@ -14,6 +14,7 @@ from app.agui.agent import (
     WeatherChatAgent,
     WeatherClientToolCallAgent,
     WeatherDashboardActivityAgent,
+    WeatherMcpAppsActivityAgent,
     WeatherResumableToolCallAgent,
     WeatherToolCallAgent,
 )
@@ -75,6 +76,14 @@ def agui_weather_dashboard_agent_demo(run_input: RunAgentInput) -> StreamingResp
     de estrutura (mesmo `activityType` `a2ui-surface`, renderizado pelo
     `A2uiActivityRenderer` já existente da issue #73)."""
     return _stream(WeatherDashboardActivityAgent(), run_input)
+
+
+@router.post("/agui/weather-mcp-apps-agent-demo")
+def agui_weather_mcp_apps_agent_demo(run_input: RunAgentInput) -> StreamingResponse:
+    """Demo funcional das issues #84/#85: emite um ACTIVITY_SNAPSHOT `mcp-apps`
+    com o resultado de `get_weather`, e resolve requisições MCP Apps proxied
+    pelo CopilotKit (`forwarded_props.__proxiedMCPRequest`)."""
+    return _stream(WeatherMcpAppsActivityAgent(), run_input)
 
 
 def _stream(agent: AGUIAgent, run_input: RunAgentInput | None = None) -> StreamingResponse:

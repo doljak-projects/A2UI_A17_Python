@@ -20,10 +20,17 @@ from ag_ui.core import (
     ToolMessage,
 )
 
-from app.agui.a2ui_constants import A2UI_SURFACE_ACTIVITY_TYPE, WEATHER_CATALOG_ID
+from app.agui.a2ui_constants import (
+    A2UI_SURFACE_ACTIVITY_TYPE,
+    MCP_APPS_ACTIVITY_TYPE,
+    WEATHER_CATALOG_ID,
+    WEATHER_MCP_RESOURCE_URI,
+    WEATHER_MCP_SERVER_HASH,
+)
 from app.agui.a2ui_weather_card import create_weather_card
 from app.agui.dashboard_cache import dashboard_structure_cache
 from app.agui.dashboard_dsl import build_dashboard_data_model, dsl_from_cities, hash_dsl
+from app.agui.mcp_proxy import McpProxyError, execute_proxied_mcp_request
 from app.services.weather import get_weather
 
 
@@ -37,6 +44,37 @@ class AGUIAgent(ABC):
     @abstractmethod
     def run(self, input: RunAgentInput) -> Iterator[BaseEvent]:
         raise NotImplementedError
+
+    def _proxy_mcp_request_events(self, input: RunAgentInput) -> Iterator[BaseEvent]:
+        """Atende requisições MCP Apps proxied pelo CopilotKit (issue #85).
+
+        O `MCPAppsMiddleware`-equivalente deste projeto não existe no lado
+        transporte HTTP — o proxy acontece aqui, dentro do próprio agente:
+        quando o widget (dentro do iframe) pede um recurso/tool via
+        `provideMCPApps`, o CopilotKit encaminha a requisição pro agente ativo
+        via `forwarded_props.__proxiedMCPRequest`, em vez de bater direto no
+        MCP Server.
+        """
+        proxy_request = input.forwarded_props.get("__proxiedMCPRequest")
+        if proxy_request is None:
+            return
+
+        yield RunStartedEvent(thread_id=input.thread_id, run_id=input.run_id)
+        try:
+            result = execute_proxied_mcp_request(proxy_request)
+        except McpProxyError as exc:
+            yield RunFinishedEvent(
+                thread_id=input.thread_id,
+                run_id=input.run_id,
+                result={"isError": True, "content": [{"type": "text", "text": str(exc)}]},
+            )
+            return
+
+        yield RunFinishedEvent(
+            thread_id=input.thread_id,
+            run_id=input.run_id,
+            result=result,
+        )
 
 
 class WeatherChatAgent(AGUIAgent):
@@ -254,5 +292,49 @@ class WeatherDashboardActivityAgent(AGUIAgent):
             message_id=self.ACTIVITY_MESSAGE_ID,
             activity_type=A2UI_SURFACE_ACTIVITY_TYPE,
             content={"operations": operations, "cacheHit": cache_hit},
+        )
+        yield RunFinishedEvent(thread_id=input.thread_id, run_id=input.run_id)
+
+
+class WeatherMcpAppsActivityAgent(AGUIAgent):
+    """Issues #84/#85: snapshot mcp-apps + proxy de recurso/tool.
+
+    Mesmo transporte `ACTIVITY_SNAPSHOT` já usado pelo A2UI (issue #72), mas
+    carregando metadata de MCP Apps (`resourceUri` + resultado estruturado da
+    tool) em vez de operações A2UI. Quando o widget (dentro do iframe) precisa
+    buscar o recurso/tool de novo via `provideMCPApps`, a requisição chega
+    proxied em `forwarded_props.__proxiedMCPRequest` e é resolvida por
+    `_proxy_mcp_request_events` (herdado de `AGUIAgent`).
+    """
+
+    ACTIVITY_MESSAGE_ID = "8001"
+    CITY = "São Paulo"
+
+    def run(self, input: RunAgentInput) -> Iterator[BaseEvent]:
+        if input.forwarded_props.get("__proxiedMCPRequest"):
+            yield from self._proxy_mcp_request_events(input)
+            return
+
+        weather = get_weather(self.CITY)
+        weather_payload = json.loads(weather.model_dump_json())
+
+        yield RunStartedEvent(thread_id=input.thread_id, run_id=input.run_id)
+        yield ActivitySnapshotEvent(
+            message_id=self.ACTIVITY_MESSAGE_ID,
+            activity_type=MCP_APPS_ACTIVITY_TYPE,
+            content={
+                "serverHash": WEATHER_MCP_SERVER_HASH,
+                "resourceUri": WEATHER_MCP_RESOURCE_URI,
+                "toolInput": {"city": self.CITY},
+                "result": {
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": json.dumps(weather_payload, ensure_ascii=False),
+                        }
+                    ],
+                    "structuredContent": weather_payload,
+                },
+            },
         )
         yield RunFinishedEvent(thread_id=input.thread_id, run_id=input.run_id)

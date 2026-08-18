@@ -9,6 +9,7 @@ BASIC_CATALOG_ID = "https://a2ui.org/specification/v0_9/catalogs/basic/catalog.j
 WEATHER_CATALOG_ID = "https://a2ui.org/specification/v0_9/catalogs/weather/catalog.json"
 
 A2UI_SURFACE_ACTIVITY_TYPE = "a2ui-surface"
+MCP_APPS_ACTIVITY_TYPE = "mcp-apps"
 
 REFRESH_WEATHER_ACTION = "refreshWeather"
 
@@ -16,3 +17,7 @@ REFRESH_WEATHER_ACTION = "refreshWeather"
 # pelo MCP Server (`app/mcp/server.py`) quanto por uma rota HTML direta
 # (`app/api/routes/mcp_apps.py`) pra demos isoladas sem cliente MCP.
 WEATHER_MCP_RESOURCE_URI = "ui://weather/card.html"
+
+# Identificador do servidor MCP interno, incluído no snapshot mcp-apps (issue
+# #84) pra o cliente correlacionar de qual servidor o widget veio.
+WEATHER_MCP_SERVER_HASH = "a2ui-local-mcp"

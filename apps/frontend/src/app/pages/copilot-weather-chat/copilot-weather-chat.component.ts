@@ -20,15 +20,16 @@ import { CopilotKit, RenderToolCalls } from '@copilotkit/angular';
 import { CopilotActivityComponent } from '../../components/copilot-activity/copilot-activity.component';
 import {
   WEATHER_A2UI_AGENT_ID,
+  WEATHER_MCP_APPS_AGENT_ID,
   WEATHER_TOOL_AGENT_ID,
   injectWeatherAgentStore,
   type WeatherChatAgentMode,
 } from '../../core/services/weather-agent-store';
 
 /**
- * Demo das issues #50/#74: chat sidecar com suporte a mensagens `activity`
- * (card A2UI renderizado via `A2uiActivityRenderer`, issue #73) além do modo
- * de tool call client-side já existente (issue #45).
+ * Demo das issues #50/#74/#87: chat sidecar com suporte a mensagens `activity`
+ * (card A2UI via `A2uiActivityRenderer`, issue #73; widget MCP Apps via
+ * `provideMCPApps`, issue #86) além do modo de tool call client-side (#45).
  */
 @Component({
   selector: 'app-copilot-weather-chat',
@@ -50,19 +51,34 @@ export class CopilotWeatherChatComponent implements AfterViewChecked {
   private readonly copilotKit = inject(CopilotKit);
   private readonly toolStore = injectWeatherAgentStore('tool');
   private readonly a2uiStore = injectWeatherAgentStore('a2ui');
+  private readonly mcpAppsStore = injectWeatherAgentStore('mcp-apps');
   private shouldScroll = false;
 
   readonly agentMode = signal<WeatherChatAgentMode>('a2ui');
-  readonly agentStore = computed(() =>
-    this.agentMode() === 'tool' ? this.toolStore() : this.a2uiStore(),
-  );
+  readonly agentStore = computed(() => {
+    switch (this.agentMode()) {
+      case 'tool':
+        return this.toolStore();
+      case 'mcp-apps':
+        return this.mcpAppsStore();
+      default:
+        return this.a2uiStore();
+    }
+  });
   readonly messages = computed(() => this.agentStore().messages());
   readonly isRunning = computed(() => this.agentStore().isRunning());
   readonly error = signal<string | null>(null);
 
-  readonly activeAgentId = computed(() =>
-    this.agentMode() === 'tool' ? WEATHER_TOOL_AGENT_ID : WEATHER_A2UI_AGENT_ID,
-  );
+  readonly activeAgentId = computed(() => {
+    switch (this.agentMode()) {
+      case 'tool':
+        return WEATHER_TOOL_AGENT_ID;
+      case 'mcp-apps':
+        return WEATHER_MCP_APPS_AGENT_ID;
+      default:
+        return WEATHER_A2UI_AGENT_ID;
+    }
+  });
 
   userInput = '';
 
