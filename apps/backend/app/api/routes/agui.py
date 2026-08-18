@@ -13,6 +13,7 @@ from app.agui.agent import (
     WeatherA2UiActivityAgent,
     WeatherChatAgent,
     WeatherClientToolCallAgent,
+    WeatherDashboardActivityAgent,
     WeatherResumableToolCallAgent,
     WeatherToolCallAgent,
 )
@@ -66,6 +67,14 @@ def agui_weather_tool_agent_demo(run_input: RunAgentInput) -> StreamingResponse:
 def agui_weather_a2ui_agent_demo(run_input: RunAgentInput) -> StreamingResponse:
     """Demo funcional da issue #72: emite um ACTIVITY_SNAPSHOT com o card A2UI."""
     return _stream(WeatherA2UiActivityAgent(), run_input)
+
+
+@router.post("/agui/weather-dashboard-agent-demo")
+def agui_weather_dashboard_agent_demo(run_input: RunAgentInput) -> StreamingResponse:
+    """Demo funcional das issues #78-#80: dashboard multi-tile via DSL + cache
+    de estrutura (mesmo `activityType` `a2ui-surface`, renderizado pelo
+    `A2uiActivityRenderer` já existente da issue #73)."""
+    return _stream(WeatherDashboardActivityAgent(), run_input)
 
 
 def _stream(agent: AGUIAgent, run_input: RunAgentInput | None = None) -> StreamingResponse:
