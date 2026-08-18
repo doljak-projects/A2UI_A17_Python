@@ -6,6 +6,7 @@ import { BasicCatalog, provideA2Ui, provideMarkdownRenderer } from '@a2ui/angula
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { a2uiActivityRendererConfig } from './components/a2ui-activity-renderer/a2ui-activity-renderer.component';
+import { WeatherCatalog } from './catalogs/weather-catalog';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,7 +16,7 @@ export const appConfig: ApplicationConfig = {
       defaultToolRendering: true,
       renderActivityMessages: [a2uiActivityRendererConfig],
     }),
-    provideA2Ui({ catalogs: [new BasicCatalog()] }),
+    provideA2Ui({ catalogs: [new BasicCatalog(), new WeatherCatalog()] }),
     provideMarkdownRenderer(),
   ],
 };
