@@ -24,9 +24,9 @@ export const routes: Routes = [
   },
   {
     path: 'copilot-weather-chat',
-    loadComponent: () =>
-      import('./pages/copilot-weather-chat/copilot-weather-chat.component').then(
-        (m) => m.CopilotWeatherChatComponent,
+    loadChildren: () =>
+      import('./pages/copilot-weather-chat/copilot-weather-chat.routes').then(
+        (m) => m.COPILOT_WEATHER_CHAT_ROUTES,
       ),
   },
   {

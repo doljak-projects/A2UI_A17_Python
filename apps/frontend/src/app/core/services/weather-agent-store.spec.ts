@@ -33,6 +33,15 @@ describe('injectWeatherAgentStore', () => {
     expect((agent as HttpAgent).url).toBe(`${environment.apiBaseUrl}/agui/weather-a2ui-agent-demo`);
   });
 
+  it('registra o agente MCP Apps apontando pro endpoint de activity snapshot mcp-apps', () => {
+    const agent = copilotKit.getAgent('weather-mcp-apps-agent');
+
+    expect(agent).toBeInstanceOf(HttpAgent);
+    expect((agent as HttpAgent).url).toBe(
+      `${environment.apiBaseUrl}/agui/weather-mcp-apps-agent-demo`,
+    );
+  });
+
   it('registra o agente weather-agent como HttpAgent apontando pro endpoint POST resumível', () => {
     const agent = copilotKit.getAgent('weather-agent');
 

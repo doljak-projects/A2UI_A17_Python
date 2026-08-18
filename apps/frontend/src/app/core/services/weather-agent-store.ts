@@ -8,18 +8,21 @@ import { WeatherWidgetComponent } from '../../components/weather-widget/weather-
 
 export const WEATHER_TOOL_AGENT_ID = 'weather-agent';
 export const WEATHER_A2UI_AGENT_ID = 'weather-a2ui-agent';
+export const WEATHER_MCP_APPS_AGENT_ID = 'weather-mcp-apps-agent';
 
-/** Issue #72 acrescenta o modo `a2ui`; `mcp-apps` chega na issue #84. */
-export type WeatherChatAgentMode = 'tool' | 'a2ui';
+/** Issue #72 acrescenta o modo `a2ui`; issue #84 acrescenta `mcp-apps`. */
+export type WeatherChatAgentMode = 'tool' | 'a2ui' | 'mcp-apps';
 
 const AGENT_IDS: Record<WeatherChatAgentMode, string> = {
   tool: WEATHER_TOOL_AGENT_ID,
   a2ui: WEATHER_A2UI_AGENT_ID,
+  'mcp-apps': WEATHER_MCP_APPS_AGENT_ID,
 };
 
 const AGENT_ENDPOINTS: Record<WeatherChatAgentMode, string> = {
   tool: '/agui/weather-tool-agent-demo',
   a2ui: '/agui/weather-a2ui-agent-demo',
+  'mcp-apps': '/agui/weather-mcp-apps-agent-demo',
 };
 
 /**
