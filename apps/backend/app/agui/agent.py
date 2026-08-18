@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Iterator
 
 from ag_ui.core import (
+    ActivitySnapshotEvent,
     BaseEvent,
     RunAgentInput,
     RunFinishedEvent,
@@ -19,6 +20,8 @@ from ag_ui.core import (
     ToolMessage,
 )
 
+from app.agui.a2ui_constants import A2UI_SURFACE_ACTIVITY_TYPE, BASIC_CATALOG_ID
+from app.agui.a2ui_weather_card import create_weather_card
 from app.services.weather import get_weather
 
 
@@ -167,4 +170,30 @@ class WeatherToolCallAgent(AGUIAgent):
             role="tool",
         )
 
+        yield RunFinishedEvent(thread_id=input.thread_id, run_id=input.run_id)
+
+
+class WeatherA2UiActivityAgent(AGUIAgent):
+    """Issue #72: emite operações A2UI dentro de um ACTIVITY_SNAPSHOT.
+
+    Reaproveita o mesmo ciclo `createSurface`/`updateComponents`/`updateDataModel`
+    já usado na rota de demo isolada `/a2ui-test` (issues #53/#54), mas agora
+    emitido por um agente real via transporte AG-UI — em vez do cliente montar
+    as mensagens manualmente.
+    """
+
+    ACTIVITY_MESSAGE_ID = "6001"
+    SURFACE_ID = "weather-chat-surface"
+    CITY = "São Paulo"
+
+    def run(self, input: RunAgentInput) -> Iterator[BaseEvent]:
+        weather = get_weather(self.CITY)
+        operations = create_weather_card(self.SURFACE_ID, BASIC_CATALOG_ID, weather)
+
+        yield RunStartedEvent(thread_id=input.thread_id, run_id=input.run_id)
+        yield ActivitySnapshotEvent(
+            message_id=self.ACTIVITY_MESSAGE_ID,
+            activity_type=A2UI_SURFACE_ACTIVITY_TYPE,
+            content={"operations": operations},
+        )
         yield RunFinishedEvent(thread_id=input.thread_id, run_id=input.run_id)

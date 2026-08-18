@@ -5,13 +5,17 @@ import { BasicCatalog, provideA2Ui, provideMarkdownRenderer } from '@a2ui/angula
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { a2uiActivityRendererConfig } from './components/a2ui-activity-renderer/a2ui-activity-renderer.component';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideCopilotKit({ defaultToolRendering: true }),
+    provideCopilotKit({
+      defaultToolRendering: true,
+      renderActivityMessages: [a2uiActivityRendererConfig],
+    }),
     provideA2Ui({ catalogs: [new BasicCatalog()] }),
-    provideMarkdownRenderer()
-  ]
+    provideMarkdownRenderer(),
+  ],
 };

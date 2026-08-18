@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BasicCatalog, provideA2Ui, provideMarkdownRenderer } from '@a2ui/angular/v0_9';
 import { CopilotKit, provideCopilotKit } from '@copilotkit/angular';
 
+import { a2uiActivityRendererConfig } from '../../components/a2ui-activity-renderer/a2ui-activity-renderer.component';
 import { CopilotWeatherChatComponent } from './copilot-weather-chat.component';
 
 describe('CopilotWeatherChatComponent', () => {
@@ -11,7 +13,14 @@ describe('CopilotWeatherChatComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [CopilotWeatherChatComponent],
-      providers: [provideCopilotKit({ defaultToolRendering: true })],
+      providers: [
+        provideCopilotKit({
+          defaultToolRendering: true,
+          renderActivityMessages: [a2uiActivityRendererConfig],
+        }),
+        provideA2Ui({ catalogs: [new BasicCatalog()] }),
+        provideMarkdownRenderer(),
+      ],
     });
 
     copilotKit = TestBed.inject(CopilotKit);
@@ -23,12 +32,12 @@ describe('CopilotWeatherChatComponent', () => {
 
   it('renderiza o título da demo', () => {
     const heading = fixture.nativeElement.querySelector('h2') as HTMLElement;
-    expect(heading.textContent).toContain('issue #50');
+    expect(heading.textContent).toContain('issues #50/#74');
   });
 
   it('envia mensagem do usuário e dispara runAgent', async () => {
     const component = fixture.componentInstance;
-    const agent = copilotKit.getAgent('weather-agent')!;
+    const agent = copilotKit.getAgent('weather-a2ui-agent')!;
     const addMessageSpy = spyOn(agent, 'addMessage').and.callThrough();
     component.userInput = 'Qual o clima em São Paulo?';
 

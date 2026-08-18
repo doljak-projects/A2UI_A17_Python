@@ -10,6 +10,7 @@ from fastapi.responses import StreamingResponse
 
 from app.agui.agent import (
     AGUIAgent,
+    WeatherA2UiActivityAgent,
     WeatherChatAgent,
     WeatherClientToolCallAgent,
     WeatherResumableToolCallAgent,
@@ -59,6 +60,12 @@ def agui_weather_tool_agent_demo(run_input: RunAgentInput) -> StreamingResponse:
     Pydantic (`ag_ui.core`), então o FastAPI valida/parseia o corpo sozinho.
     """
     return _stream(WeatherResumableToolCallAgent(), run_input)
+
+
+@router.post("/agui/weather-a2ui-agent-demo")
+def agui_weather_a2ui_agent_demo(run_input: RunAgentInput) -> StreamingResponse:
+    """Demo funcional da issue #72: emite um ACTIVITY_SNAPSHOT com o card A2UI."""
+    return _stream(WeatherA2UiActivityAgent(), run_input)
 
 
 def _stream(agent: AGUIAgent, run_input: RunAgentInput | None = None) -> StreamingResponse:
