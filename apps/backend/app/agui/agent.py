@@ -22,6 +22,8 @@ from ag_ui.core import (
 
 from app.agui.a2ui_constants import A2UI_SURFACE_ACTIVITY_TYPE, WEATHER_CATALOG_ID
 from app.agui.a2ui_weather_card import create_weather_card
+from app.agui.dashboard_cache import dashboard_structure_cache
+from app.agui.dashboard_dsl import build_dashboard_data_model, dsl_from_cities, hash_dsl
 from app.services.weather import get_weather
 
 
@@ -197,5 +199,60 @@ class WeatherA2UiActivityAgent(AGUIAgent):
             message_id=self.ACTIVITY_MESSAGE_ID,
             activity_type=A2UI_SURFACE_ACTIVITY_TYPE,
             content={"operations": operations},
+        )
+        yield RunFinishedEvent(thread_id=input.thread_id, run_id=input.run_id)
+
+
+class WeatherDashboardActivityAgent(AGUIAgent):
+    """Issues #78-#80: DSL compacta + conversão determinística + cache.
+
+    O agente só decide a DSL (`dsl_from_cities`) — a estrutura A2UI
+    (`updateComponents`) é sempre gerada por código determinístico
+    (`dashboard_structure_cache`), nunca pelo LLM. Em cache-hit, a estrutura
+    é reaproveitada e só o `updateDataModel` é reconstruído com dados frescos.
+    """
+
+    ACTIVITY_MESSAGE_ID = "7001"
+    SURFACE_ID = "weather-dashboard-surface"
+    DEFAULT_CITIES = ("São Paulo", "Rio de Janeiro", "Curitiba")
+
+    def run(self, input: RunAgentInput) -> Iterator[BaseEvent]:
+        dsl = dsl_from_cities(list(self.DEFAULT_CITIES))
+        request_hash = hash_dsl(dsl)
+        cached = dashboard_structure_cache.get(request_hash)
+        cache_hit = cached is not None
+        if cached is None:
+            cached = dashboard_structure_cache.put(request_hash, dsl, self.SURFACE_ID)
+
+        weather_by_tile = [get_weather(tile.city) for tile in cached.dsl.tiles]
+        operations = [
+            {
+                "version": "v0.9",
+                "createSurface": {
+                    "surfaceId": self.SURFACE_ID,
+                    "catalogId": WEATHER_CATALOG_ID,
+                },
+            },
+            {
+                "version": "v0.9",
+                "updateComponents": {
+                    "surfaceId": self.SURFACE_ID,
+                    "components": cached.components,
+                },
+            },
+            {
+                "version": "v0.9",
+                "updateDataModel": {
+                    "surfaceId": self.SURFACE_ID,
+                    "value": build_dashboard_data_model(weather_by_tile),
+                },
+            },
+        ]
+
+        yield RunStartedEvent(thread_id=input.thread_id, run_id=input.run_id)
+        yield ActivitySnapshotEvent(
+            message_id=self.ACTIVITY_MESSAGE_ID,
+            activity_type=A2UI_SURFACE_ACTIVITY_TYPE,
+            content={"operations": operations, "cacheHit": cache_hit},
         )
         yield RunFinishedEvent(thread_id=input.thread_id, run_id=input.run_id)
