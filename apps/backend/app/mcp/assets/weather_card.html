@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Weather MCP App</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 12px 14px;
+      }
+      .card {
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 12px 14px;
+        max-width: 320px;
+      }
+      h2 {
+        margin: 0 0 8px;
+        font-size: 1.1rem;
+      }
+      p {
+        margin: 4px 0;
+        font-size: 0.95rem;
+      }
+      .muted {
+        color: #71717a;
+        font-size: 0.85rem;
+      }
+      .error {
+        color: #991b1b;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card" id="card" hidden>
+      <h2 id="city">—</h2>
+      <p id="temperature">—</p>
+      <p id="description" class="muted">—</p>
+      <p id="humidity" class="muted">Umidade: —</p>
+    </div>
+    <p id="status" class="muted">Aguardando dados da tool…</p>
+
+    <script type="module">
+      import { App, PostMessageTransport } from 'https://esm.sh/@modelcontextprotocol/ext-apps@1.7.5';
+
+      const statusEl = document.getElementById('status');
+      const cardEl = document.getElementById('card');
+      const cityEl = document.getElementById('city');
+      const temperatureEl = document.getElementById('temperature');
+      const descriptionEl = document.getElementById('description');
+      const humidityEl = document.getElementById('humidity');
+
+      function renderFromStructured(structured) {
+        if (!structured) return;
+        cityEl.textContent = structured.city ?? '—';
+        temperatureEl.textContent = `${structured.temperature_c ?? '—'}°C`;
+        descriptionEl.textContent = structured.description ?? '—';
+        humidityEl.textContent = `Umidade: ${structured.humidity ?? '—'}%`;
+        statusEl.hidden = true;
+        cardEl.hidden = false;
+      }
+
+      const app = new App();
+      app.ontoolinput = (input) => {
+        if (input?.arguments?.city) {
+          statusEl.textContent = `Consultando ${input.arguments.city}…`;
+        }
+      };
+      app.ontoolresult = (result) => {
+        renderFromStructured(result?.structuredContent);
+      };
+
+      const transport = new PostMessageTransport(window.parent, window.parent);
+      app.connect(transport);
+    </script>
+  </body>
+</html>

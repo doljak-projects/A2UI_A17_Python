@@ -29,5 +29,12 @@ export const routes: Routes = [
         (m) => m.CopilotWeatherChatComponent,
       ),
   },
+  {
+    path: 'mcp-apps-host',
+    loadComponent: () =>
+      import('./pages/mcp-apps-host/mcp-apps-host.component').then(
+        (m) => m.McpAppsHostComponent,
+      ),
+  },
   { path: '**', redirectTo: 'chat' },
 ];

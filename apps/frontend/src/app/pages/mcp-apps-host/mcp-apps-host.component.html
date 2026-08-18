@@ -1,0 +1,26 @@
+<section class="mcp-apps-host">
+  <header>
+    <h2>MCP Apps — host mínimo (issues #82/#83)</h2>
+    <p>
+      Carrega o widget HTML servido em
+      <code>GET /api/mcp-apps/weather-card</code>, conecta um
+      <code>AppBridge</code> via <code>PostMessageTransport</code> e envia
+      <code>sendToolInput</code> / <code>sendToolResult</code> mockados.
+    </p>
+  </header>
+
+  @if (status()) {
+    <p class="mcp-apps-host__status">{{ status() }}</p>
+  }
+
+  @if (error()) {
+    <p class="mcp-apps-host__error" role="alert">{{ error() }}</p>
+  }
+
+  <iframe
+    #appFrame
+    class="mcp-apps-host__frame"
+    title="Weather MCP App"
+    sandbox="allow-scripts allow-same-origin"
+  ></iframe>
+</section>
