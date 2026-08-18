@@ -1,6 +1,7 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { A2uiRendererService, BasicCatalog, SurfaceComponent } from '@a2ui/angular/v0_9';
+import { A2uiRendererService, SurfaceComponent } from '@a2ui/angular/v0_9';
 
+import { WeatherCatalog } from '../../catalogs/weather-catalog';
 import {
   createWeatherCard,
   REFRESH_WEATHER_ACTION,
@@ -28,7 +29,7 @@ const REFRESH_CITIES = ['Rio de Janeiro', 'São Paulo'];
 })
 export class A2uiTestComponent implements OnInit {
   private readonly renderer = inject(A2uiRendererService);
-  private readonly catalog = inject(BasicCatalog);
+  private readonly catalog = inject(WeatherCatalog);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly surfaceId = SURFACE_ID;

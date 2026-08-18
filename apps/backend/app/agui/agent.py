@@ -20,7 +20,7 @@ from ag_ui.core import (
     ToolMessage,
 )
 
-from app.agui.a2ui_constants import A2UI_SURFACE_ACTIVITY_TYPE, BASIC_CATALOG_ID
+from app.agui.a2ui_constants import A2UI_SURFACE_ACTIVITY_TYPE, WEATHER_CATALOG_ID
 from app.agui.a2ui_weather_card import create_weather_card
 from app.services.weather import get_weather
 
@@ -188,7 +188,9 @@ class WeatherA2UiActivityAgent(AGUIAgent):
 
     def run(self, input: RunAgentInput) -> Iterator[BaseEvent]:
         weather = get_weather(self.CITY)
-        operations = create_weather_card(self.SURFACE_ID, BASIC_CATALOG_ID, weather)
+        operations = create_weather_card(
+            self.SURFACE_ID, WEATHER_CATALOG_ID, weather, use_humidity_gauge=True
+        )
 
         yield RunStartedEvent(thread_id=input.thread_id, run_id=input.run_id)
         yield ActivitySnapshotEvent(

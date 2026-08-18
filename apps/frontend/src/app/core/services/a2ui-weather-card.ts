@@ -62,9 +62,8 @@ export function createWeatherCard(
           },
           {
             id: 'card-humidity',
-            component: 'Text',
-            variant: 'caption',
-            text: { path: '/humidity' },
+            component: 'HumidityGauge',
+            humidity: { path: '/humidity' },
           },
           {
             id: 'refresh-button-label',
