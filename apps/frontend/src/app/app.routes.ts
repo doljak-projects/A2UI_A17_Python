@@ -5,7 +5,9 @@ export const routes: Routes = [
   {
     path: 'chat',
     loadComponent: () =>
-      import('./pages/chat/chat.component').then((m) => m.ChatComponent),
+      import('./pages/copilot-weather-chat/copilot-weather-chat.component').then(
+        (m) => m.CopilotWeatherChatComponent,
+      ),
   },
   {
     path: 'home',
@@ -21,13 +23,6 @@ export const routes: Routes = [
     path: 'a2ui-test',
     loadComponent: () =>
       import('./pages/a2ui-test/a2ui-test.component').then((m) => m.A2uiTestComponent),
-  },
-  {
-    path: 'copilot-weather-chat',
-    loadChildren: () =>
-      import('./pages/copilot-weather-chat/copilot-weather-chat.routes').then(
-        (m) => m.COPILOT_WEATHER_CHAT_ROUTES,
-      ),
   },
   {
     path: 'mcp-apps-host',

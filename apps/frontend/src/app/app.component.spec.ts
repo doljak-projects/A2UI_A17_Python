@@ -1,20 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { EMPTY } from 'rxjs';
 import { AppComponent } from './app.component';
 import { routes } from './app.routes';
-import { ChatService } from './core/services/chat.service';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
-      providers: [
-        provideRouter(routes),
-        provideNoopAnimations(),
-        { provide: ChatService, useValue: { send: () => EMPTY } },
-      ],
+      providers: [provideRouter(routes), provideNoopAnimations()],
     }).compileComponents();
   });
 

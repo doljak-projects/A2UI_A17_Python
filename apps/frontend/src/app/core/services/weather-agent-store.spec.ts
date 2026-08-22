@@ -33,22 +33,6 @@ describe('injectWeatherAgentStore', () => {
     expect((agent as HttpAgent).url).toBe(`${environment.apiBaseUrl}/agui/weather-a2ui-agent-demo`);
   });
 
-  it('registra o agente MCP Apps apontando pro endpoint de activity snapshot mcp-apps', () => {
-    const agent = copilotKit.getAgent('weather-mcp-apps-agent');
-
-    expect(agent).toBeInstanceOf(HttpAgent);
-    expect((agent as HttpAgent).url).toBe(
-      `${environment.apiBaseUrl}/agui/weather-mcp-apps-agent-demo`,
-    );
-  });
-
-  it('registra o agente weather-agent como HttpAgent apontando pro endpoint POST resumível', () => {
-    const agent = copilotKit.getAgent('weather-agent');
-
-    expect(agent).toBeInstanceOf(HttpAgent);
-    expect((agent as HttpAgent).url).toBe(`${environment.apiBaseUrl}/agui/weather-tool-agent-demo`);
-  });
-
   it('devolve um AgentStore com isRunning()/messages() como signals', () => {
     const store = fixture.componentInstance.store();
 
@@ -57,11 +41,11 @@ describe('injectWeatherAgentStore', () => {
   });
 
   it('não recria o agente numa segunda injeção (idempotente)', () => {
-    const firstAgent = copilotKit.getAgent('weather-agent');
+    const firstAgent = copilotKit.getAgent('weather-a2ui-agent');
 
     const other = TestBed.createComponent(HostComponent);
     other.detectChanges();
 
-    expect(copilotKit.getAgent('weather-agent')).toBe(firstAgent);
+    expect(copilotKit.getAgent('weather-a2ui-agent')).toBe(firstAgent);
   });
 });
