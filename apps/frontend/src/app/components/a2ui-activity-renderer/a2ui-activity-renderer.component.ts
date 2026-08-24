@@ -38,13 +38,38 @@ function extractSurfaceId(operations: A2uiMessage[]): string | null {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (surfaceId(); as surface) {
-      <a2ui-v09-surface [surfaceId]="surface" />
+      <div class="weather-surface">
+        <a2ui-v09-surface [surfaceId]="surface" />
+      </div>
     }
   `,
   styles: `
     :host {
       display: block;
-      width: 100%;
+      width: min(100%, 380px);
+      max-width: 100%;
+      color: #0f172a;
+    }
+
+    .weather-surface {
+      overflow: hidden;
+      padding: 16px;
+      border-radius: 20px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+      color: #0f172a;
+    }
+
+    :host ::ng-deep {
+      color: #0f172a;
+
+      a2ui-v09-card,
+      [role='group'] {
+        background: transparent !important;
+        color: inherit !important;
+        box-shadow: none !important;
+      }
     }
   `,
 })
@@ -64,7 +89,11 @@ export class A2uiActivityRenderer implements ActivityRenderer<A2uiSurfaceContent
     effect(() => {
       const operations = this.content().operations as unknown as A2uiMessage[];
       if (!operations?.length) return;
-      this.renderer.processMessages(operations);
+      try {
+        this.renderer.processMessages(operations);
+      } catch (error) {
+        console.warn('A2UI processMessages failed', error);
+      }
     });
   }
 }

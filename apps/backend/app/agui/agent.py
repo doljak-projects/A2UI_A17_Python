@@ -27,7 +27,19 @@ from app.agui.a2ui_constants import (
     WEATHER_MCP_RESOURCE_URI,
     WEATHER_MCP_SERVER_HASH,
 )
-from app.agui.a2ui_weather_card import create_weather_card
+from app.agui.a2ui_weather_card import create_humidity_card, create_weather_card
+from app.agui.weather_intent import (
+    CORDIAL_REPLY,
+    has_weather_intent,
+    last_user_text,
+    message_text,
+    resolve_card_kind,
+    resolve_city,
+)
+from app.llm.client import HttpLLMClient, StreamingLLMClient
+from app.llm.streaming import EVENT_DELTA, stream_tool_calling
+from app.llm.types import Message
+from app.tools.registry import ToolRegistry
 from app.agui.dashboard_cache import dashboard_structure_cache
 from app.agui.dashboard_dsl import build_dashboard_data_model, dsl_from_cities, hash_dsl
 from app.agui.mcp_proxy import McpProxyError, execute_proxied_mcp_request
@@ -214,31 +226,85 @@ class WeatherToolCallAgent(AGUIAgent):
 
 
 class WeatherA2UiActivityAgent(AGUIAgent):
-    """Issue #72: emite operações A2UI dentro de um ACTIVITY_SNAPSHOT.
+    """Chat AG-UI: LLM para conversa; weather + card só com intenção de clima.
 
-    Reaproveita o mesmo ciclo `createSurface`/`updateComponents`/`updateDataModel`
-    já usado na rota de demo isolada `/a2ui-test` (issues #53/#54), mas agora
-    emitido por um agente real via transporte AG-UI — em vez do cliente montar
-    as mensagens manualmente.
+    Sem pedido de tempo/umidade a conversa vai pro LLM (sem `get_weather`).
+    Com intenção, consulta a WeatherAPI e emite o card A2UI correspondente.
     """
 
     ACTIVITY_MESSAGE_ID = "6001"
-    SURFACE_ID = "weather-chat-surface"
-    CITY = "São Paulo"
+    TEXT_MESSAGE_ID = "6002"
+    SURFACE_ID_PREFIX = "weather-chat-surface"
+    _CHAT_SYSTEM = (
+        "Você é um assistente cordial. Responda em português, de forma natural. "
+        "Não invente dados de clima — se o usuário não pediu tempo ou umidade, "
+        "apenas converse."
+    )
+
+    def __init__(self, llm_client: StreamingLLMClient | None = None) -> None:
+        self._llm_client = llm_client
 
     def run(self, input: RunAgentInput) -> Iterator[BaseEvent]:
-        weather = get_weather(self.CITY)
-        operations = create_weather_card(
-            self.SURFACE_ID, WEATHER_CATALOG_ID, weather, use_humidity_gauge=True
-        )
+        question = last_user_text(input.messages)
 
         yield RunStartedEvent(thread_id=input.thread_id, run_id=input.run_id)
-        yield ActivitySnapshotEvent(
-            message_id=self.ACTIVITY_MESSAGE_ID,
-            activity_type=A2UI_SURFACE_ACTIVITY_TYPE,
-            content={"operations": operations},
-        )
+        if has_weather_intent(question):
+            yield from self._weather_turn(input, question)
+        else:
+            yield from self._llm_turn(input)
         yield RunFinishedEvent(thread_id=input.thread_id, run_id=input.run_id)
+
+    def _weather_turn(self, input: RunAgentInput, question: str) -> Iterator[BaseEvent]:
+        city = resolve_city(question)
+        kind = resolve_card_kind(question)
+        weather = get_weather(city)
+        surface_id = f"{self.SURFACE_ID_PREFIX}-{kind}-{input.run_id}"
+        operations = (
+            create_humidity_card(surface_id, WEATHER_CATALOG_ID, weather)
+            if kind == "humidity"
+            else create_weather_card(surface_id, WEATHER_CATALOG_ID, weather)
+        )
+        activity_message_id = f"{self.ACTIVITY_MESSAGE_ID}-{input.run_id}"
+        text_message_id = f"{self.TEXT_MESSAGE_ID}-{input.run_id}"
+
+        yield TextMessageStartEvent(message_id=text_message_id, role="assistant")
+        yield TextMessageContentEvent(message_id=text_message_id, delta=CORDIAL_REPLY)
+        yield TextMessageEndEvent(message_id=text_message_id)
+        yield ActivitySnapshotEvent(
+            message_id=activity_message_id,
+            activity_type=A2UI_SURFACE_ACTIVITY_TYPE,
+            content={"operations": operations, "cardKind": kind},
+        )
+
+    def _llm_turn(self, input: RunAgentInput) -> Iterator[BaseEvent]:
+        client = self._llm_client or HttpLLMClient()
+        messages = [
+            Message(role="system", content=self._CHAT_SYSTEM),
+            *agui_messages_to_llm(input.messages),
+        ]
+        text_message_id = f"{self.TEXT_MESSAGE_ID}-{input.run_id}"
+
+        yield TextMessageStartEvent(message_id=text_message_id, role="assistant")
+        for event in stream_tool_calling(client, messages, registry=ToolRegistry()):
+            if event.type == EVENT_DELTA:
+                yield TextMessageContentEvent(
+                    message_id=text_message_id,
+                    delta=event.data["text"],
+                )
+        yield TextMessageEndEvent(message_id=text_message_id)
+
+
+def agui_messages_to_llm(messages: list[object]) -> list[Message]:
+    converted: list[Message] = []
+    for message in messages:
+        role = getattr(message, "role", None)
+        if role not in ("user", "assistant", "system"):
+            continue
+        text = message_text(getattr(message, "content", None))
+        if not text:
+            continue
+        converted.append(Message(role=role, content=text))
+    return converted
 
 
 class WeatherDashboardActivityAgent(AGUIAgent):

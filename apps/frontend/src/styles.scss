@@ -30,3 +30,18 @@ body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
+
+app-root {
+  display: block;
+  height: 100%;
+}
+
+/*
+  O CopilotKit assume um shell full-viewport (`100vh - 9rem`). Dentro da
+  toolbar + main do app isso estoura a altura, o stick-to-bottom perde o
+  fundo e o input some depois que o card A2UI cresce.
+*/
+app-copilot-weather-chat .cpk\:h-\[calc\(100vh-9rem\)\] {
+  height: 100%;
+  max-height: 100%;
+}
