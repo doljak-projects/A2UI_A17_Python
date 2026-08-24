@@ -3,6 +3,7 @@ import { BasicCatalog, provideA2Ui, provideMarkdownRenderer } from '@a2ui/angula
 import { CopilotKit, provideCopilotKit } from '@copilotkit/angular';
 import { HttpAgent } from '@ag-ui/client';
 
+import { WeatherCatalog } from '../../catalogs/weather-catalog';
 import { a2uiActivityRendererConfig } from '../../components/a2ui-activity-renderer/a2ui-activity-renderer.component';
 import { CopilotWeatherChatComponent } from './copilot-weather-chat.component';
 
@@ -18,7 +19,7 @@ describe('CopilotWeatherChatComponent', () => {
           defaultToolRendering: true,
           renderActivityMessages: [a2uiActivityRendererConfig],
         }),
-        provideA2Ui({ catalogs: [new BasicCatalog()] }),
+        provideA2Ui({ catalogs: [new BasicCatalog(), new WeatherCatalog()] }),
         provideMarkdownRenderer(),
       ],
     });

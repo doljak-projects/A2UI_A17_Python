@@ -155,8 +155,8 @@ Cada item será rastreado como uma issue no repositório. O objetivo é cobrir t
 
 ### AG-UI — Protocolo agêntico
 
-- [ ] Configurar **AG-UI Server** no backend (emissão de eventos de UI via streaming)
-- [ ] Configurar **AG-UI Client** no frontend (consumo do stream e despacho de eventos para Signals)
+- [x] Configurar **AG-UI Server** no backend (emissão de eventos de UI via streaming)
+- [x] Configurar **AG-UI Client** no frontend (consumo do stream e despacho de eventos para Signals)
 
 **Tutorial A2UI Parte 1** ([`docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md`](docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md), baseado em [AG-UI in Practice: The SDK for TypeScript](https://www.angulararchitects.io/en/blog/ag-ui-in-practice-the-sdk-for-typescript/)) — **concluída**:
 
@@ -171,9 +171,9 @@ Cada item será rastreado como uma issue no repositório. O objetivo é cobrir t
 
 ### A2UI — Frontend agêntico
 
-- [ ] Definir o **contrato do catálogo JSON** (schema que mapeia nomes de componentes para props A2UI)
-- [ ] Implementar o **catálogo de componentes A2UI** (registro de componentes renderizáveis por nome)
-- [ ] Construir o **renderer A2UI** (lê eventos AG-UI via Signal e renderiza componentes do catálogo dinamicamente)
+- [x] Definir o **contrato do catálogo JSON** (schema que mapeia nomes de componentes para props A2UI)
+- [x] Implementar o **catálogo de componentes A2UI** (registro de componentes renderizáveis por nome)
+- [x] Construir o **renderer A2UI** (lê eventos AG-UI via Signal e renderiza componentes do catálogo dinamicamente)
 
 **Tutorial A2UI Parte 1** ([`docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md`](docs/tutorial_A2UI/01-ag-ui-sdk-typescript.md)) — **concluída**:
 
@@ -194,40 +194,43 @@ Cada item será rastreado como uma issue no repositório. O objetivo é cobrir t
 - [x] `[Front]` Modelar o card de clima com o `WeatherToolResult` existente ([#54](https://github.com/doljak-projects/A2UI_A17_Python/issues/54))
 - [x] `[Front]` Ação do cliente pra atualizar o card no lugar (`onAction`) ([#55](https://github.com/doljak-projects/A2UI_A17_Python/issues/55))
 
-**A estudar — Tutorial A2UI Parte 4** ([`docs/tutorial_A2UI/04-integrating-a2ui-with-ag-ui.md`](docs/tutorial_A2UI/04-integrating-a2ui-with-ag-ui.md), baseado em [Integrating A2UI with AG-UI and CopilotKit in Angular](https://www.angulararchitects.io/en/blog/integrating-a2ui-with-ag-ui-in-angular/)):
+**Tutorial A2UI Parte 4** ([`docs/tutorial_A2UI/04-integrating-a2ui-with-ag-ui.md`](docs/tutorial_A2UI/04-integrating-a2ui-with-ag-ui.md), baseado em [Integrating A2UI with AG-UI and CopilotKit in Angular](https://www.angulararchitects.io/en/blog/integrating-a2ui-with-ag-ui-in-angular/)) — **concluída**:
 
-- [ ] `[Back]` Emitir operações A2UI dentro de um `ACTIVITY_SNAPSHOT` do agente de clima ([#72](https://github.com/doljak-projects/A2UI_A17_Python/issues/72))
-- [ ] `[Front]` `A2uiActivityRenderer` via a interface `ActivityRenderer` do CopilotKit ([#73](https://github.com/doljak-projects/A2UI_A17_Python/issues/73))
-- [ ] `[Front]` Renderizar o card de clima dentro do chat real via o activity renderer ([#74](https://github.com/doljak-projects/A2UI_A17_Python/issues/74))
+- [x] `[Back]` Emitir operações A2UI dentro de um `ACTIVITY_SNAPSHOT` do agente de clima ([#72](https://github.com/doljak-projects/A2UI_A17_Python/issues/72))
+- [x] `[Front]` `A2uiActivityRenderer` via a interface `ActivityRenderer` do CopilotKit ([#73](https://github.com/doljak-projects/A2UI_A17_Python/issues/73))
+- [x] `[Front]` Renderizar o card de clima dentro do chat real via o activity renderer ([#74](https://github.com/doljak-projects/A2UI_A17_Python/issues/74))
 
-**A estudar — Tutorial A2UI Parte 5** ([`docs/tutorial_A2UI/05-custom-catalogs-in-a2ui.md`](docs/tutorial_A2UI/05-custom-catalogs-in-a2ui.md), baseado em [Custom Catalogs in A2UI](https://www.angulararchitects.io/en/blog/custom-catalogs-in-a2ui-your-own-components-for-ai-generated-uis/)):
+**Tutorial A2UI Parte 5** ([`docs/tutorial_A2UI/05-custom-catalogs-in-a2ui.md`](docs/tutorial_A2UI/05-custom-catalogs-in-a2ui.md), baseado em [Custom Catalogs in A2UI](https://www.angulararchitects.io/en/blog/custom-catalogs-in-a2ui-your-own-components-for-ai-generated-uis/)) — **concluída**:
 
-- [ ] `[Front]` Componente customizado de clima (`HumidityGauge`) com schema Zod + `binding()` ([#75](https://github.com/doljak-projects/A2UI_A17_Python/issues/75))
-- [ ] `[Front]` Registrar catálogo customizado via `BasicCatalogBase` + `A2UI_RENDERER_CONFIG` ([#76](https://github.com/doljak-projects/A2UI_A17_Python/issues/76))
-- [ ] `[Front]` Usar o widget customizado no card de clima ([#77](https://github.com/doljak-projects/A2UI_A17_Python/issues/77))
+- [x] `[Front]` Componente customizado de clima (`HumidityGauge`) com schema Zod + `binding()` ([#75](https://github.com/doljak-projects/A2UI_A17_Python/issues/75))
+- [x] `[Front]` Registrar catálogo customizado via `BasicCatalogBase` + `A2UI_RENDERER_CONFIG` ([#76](https://github.com/doljak-projects/A2UI_A17_Python/issues/76))
+- [x] `[Front]` Usar o widget customizado no card de clima ([#77](https://github.com/doljak-projects/A2UI_A17_Python/issues/77))
 
-**A estudar — Tutorial A2UI Parte 6** ([`docs/tutorial_A2UI/06-a2ui-dashboard-performance.md`](docs/tutorial_A2UI/06-a2ui-dashboard-performance.md), baseado em [How I Made My A2UI Dashboard 300 Times Faster](https://www.angulararchitects.io/en/blog/how-i-made-my-a2ui-dashboard-300-times-faster/)):
+**Tutorial A2UI Parte 6** ([`docs/tutorial_A2UI/06-a2ui-dashboard-performance.md`](docs/tutorial_A2UI/06-a2ui-dashboard-performance.md), baseado em [How I Made My A2UI Dashboard 300 Times Faster](https://www.angulararchitects.io/en/blog/how-i-made-my-a2ui-dashboard-300-times-faster/)) — **concluída**:
 
-- [ ] `[Back]` DSL compacta pra um mini-dashboard de clima, no lugar de markup A2UI completo ([#78](https://github.com/doljak-projects/A2UI_A17_Python/issues/78))
-- [ ] `[Back]` Conversão determinística DSL → A2UI no backend ([#79](https://github.com/doljak-projects/A2UI_A17_Python/issues/79))
-- [ ] `[Back]` Cache da estrutura gerada por hash da requisição ([#80](https://github.com/doljak-projects/A2UI_A17_Python/issues/80))
+- [x] `[Back]` DSL compacta pra um mini-dashboard de clima, no lugar de markup A2UI completo ([#78](https://github.com/doljak-projects/A2UI_A17_Python/issues/78))
+- [x] `[Back]` Conversão determinística DSL → A2UI no backend ([#79](https://github.com/doljak-projects/A2UI_A17_Python/issues/79))
+- [x] `[Back]` Cache da estrutura gerada por hash da requisição ([#80](https://github.com/doljak-projects/A2UI_A17_Python/issues/80))
 
-**A estudar — Tutorial A2UI Parte 7** ([`docs/tutorial_A2UI/07-mcp-apps-fundamentals.md`](docs/tutorial_A2UI/07-mcp-apps-fundamentals.md), baseado em [Agentic UI with MCP Apps](https://www.angulararchitects.io/en/blog/agentic-ui-with-mcp-apps-tool-results-as-interactive-widgets/), protocolo **MCP Apps** — issues marcadas `-MCP-APPS-`; suporte no SDK Python ainda não confirmado, ver issue #81):
+**Tutorial A2UI Parte 7** ([`docs/tutorial_A2UI/07-mcp-apps-fundamentals.md`](docs/tutorial_A2UI/07-mcp-apps-fundamentals.md), baseado em [Agentic UI with MCP Apps](https://www.angulararchitects.io/en/blog/agentic-ui-with-mcp-apps-tool-results-as-interactive-widgets/), protocolo **MCP Apps** — issues marcadas `-MCP-APPS-`) — **concluída**:
 
-- [ ] `[Back]` Investigar suporte a MCP Apps no SDK Python `mcp` e registrar o recurso de app da tool de clima ([#81](https://github.com/doljak-projects/A2UI_A17_Python/issues/81))
-- [ ] `[Front]` Host mínimo: iframe + `AppBridge` sobre `postMessage` ([#82](https://github.com/doljak-projects/A2UI_A17_Python/issues/82))
-- [ ] `[Front]` App mínimo: renderizar o widget a partir do input/resultado da tool ([#83](https://github.com/doljak-projects/A2UI_A17_Python/issues/83))
+- [x] `[Back]` Investigar suporte a MCP Apps no SDK Python `mcp` e registrar o recurso de app da tool de clima ([#81](https://github.com/doljak-projects/A2UI_A17_Python/issues/81))
+- [x] `[Front]` Host mínimo: iframe + `AppBridge` sobre `postMessage` ([#82](https://github.com/doljak-projects/A2UI_A17_Python/issues/82))
+- [x] `[Front]` App mínimo: renderizar o widget a partir do input/resultado da tool ([#83](https://github.com/doljak-projects/A2UI_A17_Python/issues/83))
 
-**A estudar — Tutorial A2UI Parte 8** ([`docs/tutorial_A2UI/08-mcp-apps-angular-copilotkit.md`](docs/tutorial_A2UI/08-mcp-apps-angular-copilotkit.md), baseado em [MCP Apps in Angular with CopilotKit](https://www.angulararchitects.io/en/blog/mcp-apps-in-angular-with-copilotkit-rich-chat-interfaces-instead-of-text-responses/), depende da Parte 7):
+**Tutorial A2UI Parte 8** ([`docs/tutorial_A2UI/08-mcp-apps-angular-copilotkit.md`](docs/tutorial_A2UI/08-mcp-apps-angular-copilotkit.md), baseado em [MCP Apps in Angular with CopilotKit](https://www.angulararchitects.io/en/blog/mcp-apps-in-angular-with-copilotkit-rich-chat-interfaces-instead-of-text-responses/)) — **concluída**:
 
-- [ ] `[Back]` Emitir `ACTIVITY_SNAPSHOT` (`mcp-apps`) com o resultado da tool de clima ([#84](https://github.com/doljak-projects/A2UI_A17_Python/issues/84))
-- [ ] `[Back]` Middleware de proxy no backend pras requisições de recurso/tool do widget ([#85](https://github.com/doljak-projects/A2UI_A17_Python/issues/85))
-- [ ] `[Front]` `provideMCPApps()` em `app.config.ts` ([#86](https://github.com/doljak-projects/A2UI_A17_Python/issues/86))
-- [ ] `[Front]` Renderizar a atividade de MCP Apps no chat real ([#87](https://github.com/doljak-projects/A2UI_A17_Python/issues/87))
+- [x] `[Back]` Emitir `ACTIVITY_SNAPSHOT` (`mcp-apps`) com o resultado da tool de clima ([#84](https://github.com/doljak-projects/A2UI_A17_Python/issues/84))
+- [x] `[Back]` Middleware de proxy no backend pras requisições de recurso/tool do widget ([#85](https://github.com/doljak-projects/A2UI_A17_Python/issues/85))
+- [x] `[Front]` `provideMCPApps()` em `app.config.ts` ([#86](https://github.com/doljak-projects/A2UI_A17_Python/issues/86))
+- [x] `[Front]` Renderizar a atividade de MCP Apps no chat real ([#87](https://github.com/doljak-projects/A2UI_A17_Python/issues/87))
 
 ---
 
 ## Estado atual
 
-- **Backend:** camada de tools (ToolRegistry), tool calling + streaming com LLM, tool `get_weather` (WeatherAPI.com), MCP Server em `/mcp`, CRUD de `Conversation` com SQLAlchemy + Alembic. ✅
-- **Frontend:** app shell com toolbar Material, tema `azure-blue`, tipografia e animações habilitadas — aguardando integração AG-UI/A2UI.
+As 8 partes do tutorial A2UI (`docs/tutorial_A2UI/`) estão **concluídas** — AG-UI, A2UI (protocolo Google), catálogo customizado, DSL de dashboard com cache e MCP Apps já estão todos integrados no chat real.
+
+- **Backend:** camada de tools (ToolRegistry), tool calling + streaming com LLM, tool `get_weather` (WeatherAPI.com), MCP Server em `/mcp`, CRUD de `Conversation` com SQLAlchemy + Alembic, agente AG-UI emitindo `ACTIVITY_SNAPSHOT` (A2UI e MCP Apps) para o card de clima, DSL compacta → A2UI com cache por hash, middleware de proxy MCP Apps. ✅
+- **Frontend:** app shell com toolbar Material, tema `azure-blue`; rota `/chat` unificada em torno do `<copilot-chat>` do `@copilotkit/angular` (chat antigo baseado em `ChatService`/SSE removido — [PR #94](https://github.com/doljak-projects/A2UI_A17_Python/pull/94)), com `A2uiActivityRenderer`, catálogo A2UI customizado (`HumidityGauge`) e widget MCP Apps todos operando lado a lado no mesmo chat. ✅
+- **Em andamento (working tree, ainda sem issue/PR):** ajustes no agente e no card de clima A2UI — novo módulo `weather_intent.py` no backend e componente `temperature-hero` no frontend, além de refino visual do `HumidityGauge` e do `A2uiActivityRenderer`. Ainda não commitado.
